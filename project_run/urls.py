@@ -19,6 +19,9 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
+from babaika.views import index_auto
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('autos/', index_auto),
 ]
