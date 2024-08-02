@@ -6,5 +6,5 @@ from babaika.models import Auto
 
 # Create your views here.
 def index_auto(request):
-    qs = Auto.obhects.all()
+    qs = Auto.objects.all()
     return JsonResponse(qs)
