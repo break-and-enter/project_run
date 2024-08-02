@@ -8,5 +8,5 @@ def index_auto(request):
     print(qs)
     d = []
     for i in qs:
-        d.append(f'name:{i.name}')
+        d.append(i.name)
     return JsonResponse(d, safe=False)
