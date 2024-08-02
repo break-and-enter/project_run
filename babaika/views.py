@@ -3,8 +3,10 @@ from django.shortcuts import render
 
 from babaika.models import Auto
 
-
-# Create your views here.
 def index_auto(request):
     qs = Auto.objects.all()
-    return JsonResponse(qs)
+    print(qs)
+    d = {}
+    for i in qs:
+        d[i.id] = i.name
+    return JsonResponse(d)
