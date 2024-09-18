@@ -13,6 +13,6 @@ class RunViewSet(viewsets.ModelViewSet):
 class StatusStartView(APIView):
     def post(self, request, run_id):
         run = Run.objects.get(id=run_id)
-        run.status = 'init'
+        run.status = 'in_progress'
         run.save()
-        return Response(status=status.HTTP_200_OK)
+        return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
