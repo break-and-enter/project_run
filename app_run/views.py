@@ -13,6 +13,10 @@ class RunViewSet(viewsets.ModelViewSet):
 class StatusStartView(APIView):
     def post(self, request, run_id):
         run = Run.objects.get(id=run_id)
-        run.status = 'in_progress'
-        run.save()
-        return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
+        if run.status == 'init':
+            run.status = 'in_progress'
+            run.save()
+            return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Ты чо! Этот забег стартовать нельзя, он уже стартовал'},
+                            status=status.HTTP_400_BAD_REQUEST)
