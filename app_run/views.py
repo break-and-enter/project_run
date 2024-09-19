@@ -33,3 +33,10 @@ def status_stop_view(request, run_id):
     else:
         return Response({'message': 'Ты чо! Этот забег финишировать нельзя, он еще не стартовал или уже завершен'},
                         status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def company_details(request):
+    return Response({'company_name': 'Космическая Картошка',
+                     'slogan':'Картофельное Пюре - путь к звездам!',
+                     'contacts': 'Город Задунайск, улица Картофельная дом 16'}, status=status.HTTP_200_OK)
