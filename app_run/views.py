@@ -14,7 +14,7 @@ class RunViewSet(viewsets.ModelViewSet):
 
 class StatusStartView(APIView):
     def post(self, request, run_id):
-        run = get_object_or_404(Run, run_id)
+        run = get_object_or_404(Run, id=run_id)
         if run.status == 'init':
             run.status = 'in_progress'
             run.save()
@@ -25,7 +25,7 @@ class StatusStartView(APIView):
 
 @api_view(['POST'])
 def status_stop_view(request, run_id):
-    run = get_object_or_404(Run,run_id)
+    run = get_object_or_404(Run,id=run_id)
     if run.status == 'in_progress':
         run.status = 'finished'
         run.save()
