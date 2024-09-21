@@ -3,7 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Run
+from .models import Run, Position
 from .serializers import RunSerializer
 
 
@@ -40,3 +40,14 @@ def company_details(request):
     return Response({'company_name': 'Космическая Картошка',
                      'slogan':'Картофельное Пюре - путь к звездам!',
                      'contacts': 'Город Задунайск, улица Картофельная дом 16'}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET', 'POST'])
+def position_view(request, run_id, latitude, longitude):
+    if request.method == 'GET':
+        position = Position.objects.get(id=run_id)
+        return Response()
+    if request.method == 'POST':
+        return Response()
+
+
