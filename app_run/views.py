@@ -55,13 +55,13 @@ def company_details(request):
 
 class PositionView(APIView):
     def post(self, request):
-        run_id = int(request.data.get('run'))
+        run_id = request.data.get('run')
         latitude = request.data.get('latitude')
         longitude = request.data.get('longitude')
 
         run = get_object_or_404(Run,id=run_id)
         if run.status == 'in_progress':
-            position = Position.objects.create(run=run_id, latitude=latitude, longitude=longitude)
+            position = Position.objects.create(run=run, latitude=latitude, longitude=longitude)
             return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'Забег не начат или закончен'}, status=status.HTTP_400_BAD_REQUEST)
