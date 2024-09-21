@@ -42,15 +42,27 @@ def company_details(request):
                      'contacts': 'Город Задунайск, улица Картофельная дом 16'}, status=status.HTTP_200_OK)
 
 
-@api_view(['GET', 'POST'])
-def position_view(request, run_id):
-    if request.method == 'GET':
-        position = Position.objects.get(id=run_id)
-        return Response({'latitude': position.latitude, 'longitude': position.longitude})
-    if request.method == 'POST':
+# @api_view(['GET', 'POST'])
+# def position_view(request, run_id):
+#     if request.method == 'GET':
+#         position = Position.objects.get(id=run_id)
+#         return Response({'latitude': position.latitude, 'longitude': position.longitude})
+#     if request.method == 'POST':
+#         latitude = request.POST.get('latitude')
+#         longitude = request.POST.get('longitude')
+#         position = Position.objects.create(run=run_id, latitude = latitude, longitude = longitude)
+#         return Response({'message': 'Position created'})
+
+class PositionView(APIView):
+    def post(self, request):
+        run_id = request.POST.get('run_id')
         latitude = request.POST.get('latitude')
         longitude = request.POST.get('longitude')
-        position = Position.objects.create(run=run_id, latitude = latitude, longitude = longitude)
-        return Response({'message': 'Position created'})
 
+        run = get_object_or_404(Run,id=run_id)
+        if run.status == 'in_progress':
+            position = Position.objects.create(run=run_id, latitude=latitude, longitude=longitude)
+            return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Забег не начат или закончен'}, status=status.HTTP_400_BAD_REQUEST)
 
