@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Run, Position
-from .serializers import RunSerializer
+from .serializers import RunSerializer, PositionSerializer
 
 
 class RunViewSet(viewsets.ModelViewSet):
@@ -42,27 +42,20 @@ def company_details(request):
                      'contacts': 'Город Задунайск, улица Картофельная дом 16'}, status=status.HTTP_200_OK)
 
 
-# @api_view(['GET', 'POST'])
-# def position_view(request, run_id):
-#     if request.method == 'GET':
-#         position = Position.objects.get(id=run_id)
-#         return Response({'latitude': position.latitude, 'longitude': position.longitude})
-#     if request.method == 'POST':
-#         latitude = request.POST.get('latitude')
-#         longitude = request.POST.get('longitude')
-#         position = Position.objects.create(run=run_id, latitude = latitude, longitude = longitude)
-#         return Response({'message': 'Position created'})
+# class PositionView(APIView):
+#     def post(self, request):
+#         run_id = request.data.get('run')
+#         latitude = request.data.get('latitude')
+#         longitude = request.data.get('longitude')
+#
+#         run = get_object_or_404(Run,id=run_id)
+#         if run.status == 'in_progress':
+#             position = Position.objects.create(run=run, latitude=latitude, longitude=longitude)
+#             return Response({'message': 'Все ништяк'}, status=status.HTTP_201_CREATED)
+#         else:
+#             return Response({'message': 'Забег не начат или закончен'}, status=status.HTTP_400_BAD_REQUEST)
 
-class PositionView(APIView):
-    def post(self, request):
-        run_id = request.data.get('run')
-        latitude = request.data.get('latitude')
-        longitude = request.data.get('longitude')
 
-        run = get_object_or_404(Run,id=run_id)
-        if run.status == 'in_progress':
-            position = Position.objects.create(run=run, latitude=latitude, longitude=longitude)
-            return Response({'message': 'Все ништяк'}, status=status.HTTP_201_CREATED)
-        else:
-            return Response({'message': 'Забег не начат или закончен'}, status=status.HTTP_400_BAD_REQUEST)
-
+class PositionViewSet(viewsets.ModelViewSet):
+    queryset = Position.objects.all()
+    serializer_class = PositionSerializer
