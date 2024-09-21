@@ -15,7 +15,7 @@ class Run(models.Model):
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='init')
 
 class Position(models.Model):
-    latitude = models.DecimalField(decimal_places=1, max_digits=3)
-    longitude = models.DecimalField(decimal_places=1, max_digits=4)
+    latitude = models.DecimalField(decimal_places=1, max_digits=6)
+    longitude = models.DecimalField(decimal_places=1, max_digits=7)
     run = models.ForeignKey(Run, on_delete=models.CASCADE)
 
