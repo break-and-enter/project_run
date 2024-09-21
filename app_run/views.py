@@ -55,9 +55,9 @@ def company_details(request):
 
 class PositionView(APIView):
     def post(self, request):
-        run_id = request.POST.get('run_id')
-        latitude = request.POST.get('latitude')
-        longitude = request.POST.get('longitude')
+        run_id = request.data.get('run_id')
+        latitude = request.data.get('latitude')
+        longitude = request.data.get('longitude')
 
         run = get_object_or_404(Run,id=run_id)
         if run.status == 'in_progress':
