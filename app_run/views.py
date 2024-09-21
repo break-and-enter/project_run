@@ -62,7 +62,7 @@ class PositionView(APIView):
         run = get_object_or_404(Run,id=run_id)
         if run.status == 'in_progress':
             position = Position.objects.create(run=run, latitude=latitude, longitude=longitude)
-            return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Все ништяк'}, status=status.HTTP_201_CREATED)
         else:
             return Response({'message': 'Забег не начат или закончен'}, status=status.HTTP_400_BAD_REQUEST)
 
