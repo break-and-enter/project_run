@@ -31,6 +31,6 @@ urlpatterns = [
     path('api/runs/<int:run_id>/start/', StatusStartView.as_view()),
     path('api/runs/<int:run_id>/stop/', status_stop_view),
     path('api/company_details/', company_details),
-    path('api/positions/', position_view),
+    path('api/positions/<int:run_id>/', position_view),
     path('', include(router.urls)),
 ]

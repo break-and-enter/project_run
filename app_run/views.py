@@ -43,11 +43,14 @@ def company_details(request):
 
 
 @api_view(['GET', 'POST'])
-def position_view(request, run_id, latitude, longitude):
+def position_view(request, run_id):
     if request.method == 'GET':
         position = Position.objects.get(id=run_id)
-        return Response()
+        return Response({'latitude': position.latitude, 'longitude': position.longitude})
     if request.method == 'POST':
-        return Response()
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        position = Position.objects.create(run=run_id, latitude = latitude, longitude = longitude)
+        return Response({'message': 'Position created'})
 
 
