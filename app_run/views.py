@@ -55,7 +55,7 @@ def company_details(request):
 
 class PositionView(APIView):
     def post(self, request):
-        run_id = request.data.get('run')
+        run_id = int(request.data.get('run'))
         latitude = request.data.get('latitude')
         longitude = request.data.get('longitude')
 
