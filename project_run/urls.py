@@ -25,9 +25,6 @@ router = DefaultRouter()
 router.register(r'api/runs', RunViewSet)
 router.register(r'api/positions', PositionViewSet)
 
-
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/runs/<int:run_id>/start/', StatusStartView.as_view()),

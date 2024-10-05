@@ -42,20 +42,6 @@ def company_details(request):
                      'contacts': 'Город Задунайск, улица Картофельная дом 16'}, status=status.HTTP_200_OK)
 
 
-# class PositionView(APIView):
-#     def post(self, request):
-#         run_id = request.data.get('run')
-#         latitude = request.data.get('latitude')
-#         longitude = request.data.get('longitude')
-#
-#         run = get_object_or_404(Run,id=run_id)
-#         if run.status == 'in_progress':
-#             position = Position.objects.create(run=run, latitude=latitude, longitude=longitude)
-#             return Response({'message': 'Все ништяк'}, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response({'message': 'Забег не начат или закончен'}, status=status.HTTP_400_BAD_REQUEST)
-
-
 class PositionViewSet(viewsets.ModelViewSet):
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
