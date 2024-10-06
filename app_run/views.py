@@ -30,8 +30,8 @@ def status_stop_view(request, run_id):
     run = get_object_or_404(Run,id=run_id)
     if run.status == 'in_progress':
         # НЕ ЗАБЫТЬ РАСКОММЕНТИРОВАТЬ !!
-        # run.status = 'finished'
-        # run.save()
+        run.status = 'finished'
+        run.save()
         positions = Position.objects.filter(run=run_id)
 
         start_positions = positions[0].latitude, positions[0].longitude
