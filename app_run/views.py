@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .models import Run, Position
 from .serializers import RunSerializer, PositionSerializer
 from haversine import haversine
+from geopy.distance import geodesic
 
 
 class RunViewSet(viewsets.ModelViewSet):
@@ -29,15 +30,16 @@ def status_stop_view(request, run_id):
     run = get_object_or_404(Run,id=run_id)
     if run.status == 'in_progress':
         # НЕ ЗАБЫТЬ РАСКОММЕНТИРОВАТЬ !!
-        run.status = 'finished'
-        run.save()
+        # run.status = 'finished'
+        # run.save()
         positions = Position.objects.filter(run=run_id)
 
         start_positions = positions[0].latitude, positions[0].longitude
         end_positions = positions[len(positions)-1].latitude, positions[len(positions)-1].longitude
         # print(start_positions)
         # print(end_positions)
-        distance = haversine(start_positions, end_positions)
+        # distance = haversine(start_positions, end_positions)
+        distance = geodesic(start_positions, end_positions).kilometers
         # print(distance)
         run.distance = distance
         run.save()
