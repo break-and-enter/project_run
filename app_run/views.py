@@ -32,14 +32,13 @@ def status_stop_view(request, run_id):
         # НЕ ЗАБЫТЬ РАСКОММЕНТИРОВАТЬ !!
         run.status = 'finished'
         run.save()
-        positions = Position.objects.filter(run=run_id)
+        positions_qs = Position.objects.filter(run=run_id)
+        positions_quantity = len(positions_qs) # Количество записанных координат
+        distance = 0
+        for i in range(positions_quantity-1):
+            distance += geodesic((positions_qs[i].latitude,positions_qs[i].longitude), (positions_qs[i+1].latitude,positions_qs[i+1].longitude)).kilometers
 
-        start_positions = positions[0].latitude, positions[0].longitude
-        end_positions = positions[len(positions)-1].latitude, positions[len(positions)-1].longitude
-        # print(start_positions)
-        # print(end_positions)
         # distance = haversine(start_positions, end_positions)
-        distance = geodesic(start_positions, end_positions).kilometers
         # print(distance)
         run.distance = distance
         run.save()
