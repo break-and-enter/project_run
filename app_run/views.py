@@ -3,6 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
 from .models import Run, Position
 from .serializers import RunSerializer, PositionSerializer
 from geopy.distance import geodesic
@@ -12,8 +13,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 class RunViewSet(viewsets.ModelViewSet):
     queryset = Run.objects.all()
     serializer_class = RunSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['status']
+    ordering_fields = ['created_at']
 
 
 class StatusStartView(APIView):
