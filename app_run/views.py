@@ -6,11 +6,14 @@ from rest_framework.response import Response
 from .models import Run, Position
 from .serializers import RunSerializer, PositionSerializer
 from geopy.distance import geodesic
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class RunViewSet(viewsets.ModelViewSet):
     queryset = Run.objects.all()
     serializer_class = RunSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['status']
 
 
 class StatusStartView(APIView):
@@ -28,7 +31,6 @@ class StatusStartView(APIView):
 def status_stop_view(request, run_id):
     run = get_object_or_404(Run,id=run_id)
     if run.status == 'in_progress':
-        # НЕ ЗАБЫТЬ РАСКОММЕНТИРОВАТЬ !!
         run.status = 'finished'
         run.save()
         positions_qs = Position.objects.filter(run=run_id)
@@ -37,8 +39,6 @@ def status_stop_view(request, run_id):
         for i in range(positions_quantity-1):
             distance += geodesic((positions_qs[i].latitude,positions_qs[i].longitude), (positions_qs[i+1].latitude,positions_qs[i+1].longitude)).kilometers
 
-        # distance = haversine(start_positions, end_positions)
-        # print(distance)
         run.distance = distance
         run.save()
 
