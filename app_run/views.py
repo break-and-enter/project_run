@@ -5,7 +5,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Run, Position
 from .serializers import RunSerializer, PositionSerializer
-from haversine import haversine
 from geopy.distance import geodesic
 
 
