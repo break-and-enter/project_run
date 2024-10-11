@@ -51,7 +51,11 @@ def status_stop_view(request, run_id):
         #           positions_qs_sorted_by_date[i].longitude,
         #           positions_qs_sorted_by_date[i].date_time)
         run_time = positions_qs_sorted_by_date[positions_quantity-1].date_time-positions_qs_sorted_by_date[0].date_time
-        print(run_time)
+        # print(run_time)
+        # print(type(run_time))
+        # print(run_time.total_seconds())
+        run.run_time_seconds = run_time.total_seconds()
+        # run.save()
 
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
     else:
