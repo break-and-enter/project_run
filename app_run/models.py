@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 STATUS_CHOICES = [
-    ('init', 'Старт забега'),
+    ('init', 'Инициализация забега'),
     ('in_progress', 'Забег в процессе'),
     ('finished', 'Забег окончен'),
 ]
