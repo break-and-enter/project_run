@@ -55,7 +55,7 @@ def status_stop_view(request, run_id):
         # print(type(run_time))
         # print(run_time.total_seconds())
         run.run_time_seconds = run_time.total_seconds()
-        # run.save()
+        run.save()
 
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
     else:
