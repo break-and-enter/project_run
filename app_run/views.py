@@ -45,17 +45,10 @@ def status_stop_view(request, run_id):
         # run.save()
         # -----------------------------------------
         positions_qs_sorted_by_date = positions_qs.order_by('date_time')
-        # for i in range(positions_quantity):
-        #     print(positions_qs_sorted_by_date[i].id,
-        #           positions_qs_sorted_by_date[i].latitude,
-        #           positions_qs_sorted_by_date[i].longitude,
-        #           positions_qs_sorted_by_date[i].date_time)
+
         run_time = positions_qs_sorted_by_date[positions_quantity-1].date_time-positions_qs_sorted_by_date[0].date_time
-        # print(run_time)
-        # print(type(run_time))
-        # print(run_time.total_seconds())
-        # run.run_time_seconds = run_time.total_seconds()
-        run.run_time_seconds = 5555
+        run.run_time_seconds = run_time.total_seconds()
+        raise Exception(f'Конец: {positions_qs_sorted_by_date[positions_quantity-1].date_time} Начало: {positions_qs_sorted_by_date[0].date_time}')
         run.save()
 
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
