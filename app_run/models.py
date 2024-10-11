@@ -19,5 +19,6 @@ class Run(models.Model):
 class Position(models.Model):
     latitude = models.DecimalField(decimal_places=4, max_digits=7)
     longitude = models.DecimalField(decimal_places=4, max_digits=8)
+    date_time = models.DateTimeField(auto_now=True)
     run = models.ForeignKey(Run, on_delete=models.CASCADE)
 
