@@ -86,8 +86,8 @@ class PositionViewSet(viewsets.ModelViewSet):
                                  (previous_position.latitude, previous_position.longitude)).meters
             time_delta = last_position.date_time - previous_position.date_time
             speed = last_distance/time_delta.total_seconds()
-            last_position.speed = speed
-            last_position.distance = previous_distance + last_distance/1000
+            last_position.speed = round(speed, 2)
+            last_position.distance = round(previous_distance + last_distance/1000, 2)
             last_position.save()
             # print('distance', distance)
             # print('last position', last_position)
