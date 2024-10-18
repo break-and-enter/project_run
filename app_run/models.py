@@ -23,3 +23,6 @@ class Position(models.Model):
     speed = models.FloatField(default=0)
     run = models.ForeignKey(Run, on_delete=models.CASCADE)
 
+# @property
+# def distance(self):
+#     previous_position = Position.objects.filter()

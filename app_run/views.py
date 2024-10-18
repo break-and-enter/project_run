@@ -72,4 +72,24 @@ class PositionViewSet(viewsets.ModelViewSet):
             qs = qs.filter(run=run_id)
         return qs
 
+    def perform_create(self, serializer):
+        run = serializer.validated_data['run']
+        serializer.save() # чтобы включить только что создаваемую позицию в QS
+        all_positions = Position.objects.filter(run=run)
+        ordered_positions = all_positions.order_by('-id')
+        last_position = ordered_positions[0]
+        previous_position = ordered_positions[1]
+        distance = geodesic((last_position.latitude, last_position.longitude),
+                             (previous_position.latitude, previous_position.longitude)).meters
+        time_delta = last_position.date_time - previous_position.date_time
+        speed = distance/time_delta.total_seconds()
+        last_position.speed = speed
+        last_position.save()
+        print('distance', distance)
+        print('last position', last_position)
+        print('previous position', previous_position)
+        print('speed', speed)
+
+
+
 
