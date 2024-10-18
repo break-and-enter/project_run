@@ -87,10 +87,10 @@ class PositionViewSet(viewsets.ModelViewSet):
             speed = distance/time_delta.total_seconds()
             last_position.speed = speed
             last_position.save()
-        print('distance', distance)
-        print('last position', last_position)
-        print('previous position', previous_position)
-        print('speed', speed)
+            # print('distance', distance)
+            # print('last position', last_position)
+            # print('previous position', previous_position)
+            # print('speed', speed)
 
 
 
