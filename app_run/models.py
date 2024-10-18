@@ -14,15 +14,15 @@ class Run(models.Model):
     athlete = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='init')
     distance = models.FloatField(default=0)
-    speed = models.FloatField(default=0)
+    speed = models.DecimalField(default=0, decimal_places=2, max_digits=10)
     run_time_seconds = models.IntegerField(default=0)
 
 class Position(models.Model):
     latitude = models.DecimalField(decimal_places=4, max_digits=7)
     longitude = models.DecimalField(decimal_places=4, max_digits=8)
     date_time = models.DateTimeField()
-    speed = models.FloatField(default=0)
-    distance = models.FloatField(default=0)
+    speed = models.DecimalField(default=0, decimal_places=2, max_digits=10)
+    distance = models.DecimalField(default=0, decimal_places=2, max_digits=10)
     run = models.ForeignKey(Run, on_delete=models.CASCADE)
 
 # @property
