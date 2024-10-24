@@ -38,12 +38,20 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'type']
 
+    # def get_type(self, obj):
+    #     request = self.context.get('request') # Сначала получим request
+    #     user_type = request.query_params.get('type', '')
+    #     print(f"get_type вызван для объекта {obj.username}, type={user_type}")
+    #     if user_type and user_type.lower() == 'coach':
+    #         return 'coach'
+    #     if user_type and user_type.lower() == 'athlete':
+    #         return 'athlete'
+    #
+    #     return 'Other'
+
     def get_type(self, obj):
-        request = self.context.get('request') # Сначала получим request
-        user_type = request.query_params.get('type')
-        if user_type and user_type.lower() == 'coach':
+        if obj.is_staff:
             return 'coach'
-        if user_type and user_type.lower() == 'athlete':
+        else:
             return 'athlete'
 
-        return 'Other'
