@@ -41,5 +41,9 @@ class UserSerializer(serializers.ModelSerializer):
     def get_type(self, obj):
         request = self.context.get('request') # Сначала получим request
         user_type = request.query_params.get('type')
+        if user_type and user_type.lower() == 'coach':
+            return 'coach'
+        if user_type and user_type.lower() == 'athlete':
+            return 'athlete'
 
-        return user_type
+        return 'Other'
