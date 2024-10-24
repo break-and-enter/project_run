@@ -6,9 +6,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 from .models import Run, Position
-from .serializers import RunSerializer, PositionSerializer
+from .serializers import RunSerializer, PositionSerializer, UserSerializer
 from geopy.distance import geodesic
 from django_filters.rest_framework import DjangoFilterBackend
+from django.contrib.auth.models import User
 
 
 class RunViewSet(viewsets.ModelViewSet):
@@ -93,11 +94,17 @@ class PositionViewSet(viewsets.ModelViewSet):
             last_position.speed = round(speed, 2)
             last_position.distance = round(previous_distance + last_distance/1000, 2)
             last_position.save()
-            # print('distance', distance)
-            # print('last position', last_position)
-            # print('previous position', previous_position)
-            # print('speed', speed)
 
 
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.filter(is_superuser=False)
 
-
+    def get_queryset(self):
+        qs = self.queryset
+        user_type = self.request.query_params.get('type')
+        if user_type and user_type=='coach':
+            qs = qs.filter(is_staff=True)
+        if user_type and user_type=='athlete':
+            qs = qs.filter(is_staff=False)
+        return qs
