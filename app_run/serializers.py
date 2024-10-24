@@ -31,7 +31,15 @@ class PositionSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('longitude должен быть в диапазоне от -180.0 до +180.0 градусов')
         return value
 
+
 class UserSerializer(serializers.ModelSerializer):
+    type = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'username', 'first_name', 'last_name', 'type']
+
+    def get_type(self, obj):
+        request = self.context.get('request') # Сначала получим request
+        user_type = request.query_params.get('type')
+
+        return user_type
