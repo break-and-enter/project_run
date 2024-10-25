@@ -34,24 +34,19 @@ class PositionSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
+    runs_finished = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'type']
-
-    # def get_type(self, obj):
-    #     request = self.context.get('request') # Сначала получим request
-    #     user_type = request.query_params.get('type', '')
-    #     print(f"get_type вызван для объекта {obj.username}, type={user_type}")
-    #     if user_type and user_type.lower() == 'coach':
-    #         return 'coach'
-    #     if user_type and user_type.lower() == 'athlete':
-    #         return 'athlete'
-    #
-    #     return 'Other'
+        fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished']
 
     def get_type(self, obj):
         if obj.is_staff:
             return 'coach'
         else:
             return 'athlete'
+
+    def get_runs_finished(self, obj):
+        user_id = obj.id
+        runs_finished = Run.objects.filter(athlete=user_id, status='finished').count()
+        return runs_finished
 
