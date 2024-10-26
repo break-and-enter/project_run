@@ -1,4 +1,4 @@
-from django.db.models import Avg
+from django.db.models import Avg, Count, Q
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
@@ -107,4 +107,5 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.filter(is_staff=True)
         if user_type and user_type=='athlete':
             qs = qs.filter(is_staff=False)
+        qs = qs.annotate(runs_finished=Count('run', filter=Q(run__status='finished')))
         return qs

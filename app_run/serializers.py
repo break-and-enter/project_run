@@ -34,7 +34,8 @@ class PositionSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
-    runs_finished = serializers.SerializerMethodField()
+    # runs_finished = serializers.SerializerMethodField()
+    runs_finished = serializers.IntegerField()
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished']
@@ -45,8 +46,9 @@ class UserSerializer(serializers.ModelSerializer):
         else:
             return 'athlete'
 
-    def get_runs_finished(self, obj):
-        user_id = obj.id
-        runs_finished = Run.objects.filter(athlete=user_id, status='finished').count()
-        return runs_finished
+    # def get_runs_finished(self, obj):
+    #     user_id = obj.id
+    #     runs_finished = Run.objects.filter(athlete=user_id, status='finished').count()
+    #
+    #     return runs_finished
 
