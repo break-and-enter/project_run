@@ -101,6 +101,7 @@ class PositionViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.filter(is_superuser=False)
+    search_fields = ['first_name', 'last_name']
 
     def get_queryset(self):
         qs = self.queryset
