@@ -4,7 +4,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 from .models import Run, Position
 from .serializers import RunSerializer, PositionSerializer, UserSerializer
 from geopy.distance import geodesic
@@ -101,6 +101,7 @@ class PositionViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.filter(is_superuser=False)
+    filter_backends = [SearchFilter]
     search_fields = ['first_name', 'last_name']
 
     def get_queryset(self):
