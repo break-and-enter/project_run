@@ -19,6 +19,11 @@ class RunViewSet(viewsets.ModelViewSet):
     filterset_fields = ['status']
     ordering_fields = ['created_at']
 
+    # def get_queryset(self):
+    #     qs = self.queryset
+    #     qs = qs.annotate(athlete_data='athlete')
+    #     return qs
+
 
 class StatusStartView(APIView):
     def post(self, request, run_id):

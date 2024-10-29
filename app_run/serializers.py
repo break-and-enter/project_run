@@ -4,9 +4,20 @@ from django.contrib.auth.models import User
 
 
 class RunSerializer(serializers.ModelSerializer):
+    athlete_data = serializers.SerializerMethodField()
     class Meta:
         model = Run
-        fields = '__all__'
+        fields = '__all__' #, 'athlete_data'
+
+    def get_athlete_data(self, obj):
+        # return SmallUserSerializer(obj.athlete).data
+        athlete = obj.athlete
+        return {
+            'id' : athlete.id,
+            'username': athlete.username,
+            'first_name' : athlete.first_name,
+            'last_name': athlete.last_name,
+            }
 
 
 class PositionSerializer(serializers.ModelSerializer):
@@ -52,3 +63,8 @@ class UserSerializer(serializers.ModelSerializer):
     #
     #     return runs_finished
 
+
+class SmallUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name']
