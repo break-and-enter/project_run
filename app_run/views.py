@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 
 
 class RunViewSet(viewsets.ModelViewSet):
-    queryset = Run.objects.all()
+    queryset = Run.objects.select_related('athlete').all()
     serializer_class = RunSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['status', 'id']
