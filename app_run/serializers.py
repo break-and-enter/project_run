@@ -11,7 +11,7 @@ class SmallUserSerializer(serializers.ModelSerializer):
 
 class RunSerializer(serializers.ModelSerializer):
     # athlete_data = serializers.SerializerMethodField()
-    athlete_data = SmallUserSerializer(source='athlete')
+    athlete_data = SmallUserSerializer(source='athlete', read_only=True)
 
     class Meta:
         model = Run
