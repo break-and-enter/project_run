@@ -16,7 +16,7 @@ class RunViewSet(viewsets.ModelViewSet):
     queryset = Run.objects.all()
     serializer_class = RunSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ['status']
+    filterset_fields = ['status', 'id']
     ordering_fields = ['created_at']
 
     # def get_queryset(self):
