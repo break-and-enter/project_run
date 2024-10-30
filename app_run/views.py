@@ -121,5 +121,12 @@ class SubscribeView(APIView):
         print(coach_id)
         athlete_id = self.request.data['athlete']
         print(athlete_id)
+        coach = get_object_or_404(User, id=coach_id)
+        athlete = get_object_or_404(User, id=athlete_id)
+        if not coach.is_staff:
+            return Response({'message': f'Пользователь c id {coach_id} это не тренер'}, status=status.HTTP_400_BAD_REQUEST)
+        if athlete.is_staff:
+            return Response({'message': f'Пользователь c id {coach_id} это не бегун'}, status=status.HTTP_400_BAD_REQUEST)
+
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
 
