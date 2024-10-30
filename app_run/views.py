@@ -123,7 +123,7 @@ class SubscribeView(APIView):
         print(athlete_id)
         if not User.objects.filter(id=coach_id).exists():
             return Response({'message': f'Пользователя c id {coach_id} не существует'},
-                            status=status.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_404_NOT_FOUND)
         if not User.objects.filter(id=athlete_id).exists():
             return Response({'message': f'Пользователя c id {athlete_id} не существует'},
                             status=status.HTTP_400_BAD_REQUEST)
