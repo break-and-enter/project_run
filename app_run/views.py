@@ -129,11 +129,11 @@ class SubscribeView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         coach=User.objects.get(id=coach_id)
         athlete=User.objects.get(id=athlete_id)
-        # if not coach.is_staff:
-        if coach.type != 'coach':
+        if not coach.is_staff:
+        # if coach.type != 'coach':
             return Response({'message': f'Пользователь c id {coach_id} это не тренер'}, status=status.HTTP_400_BAD_REQUEST)
-        # if athlete.is_staff:
-        if athlete.type != 'athlete':
+        if athlete.is_staff:
+        # if athlete.type != 'athlete':
             return Response({'message': f'Пользователь c id {coach_id} это не бегун'}, status=status.HTTP_400_BAD_REQUEST)
         if Subscription.objects.filter(coach=coach, athlete=athlete).exists():
             return Response({'message': 'Такая подписка уже существует'},
