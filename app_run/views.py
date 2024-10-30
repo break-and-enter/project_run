@@ -113,3 +113,13 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.filter(is_staff=False)
         qs = qs.annotate(runs_finished=Count('run', filter=Q(run__status='finished')))
         return qs
+
+
+class SubscribeView(APIView):
+    def post(self, request, id):
+        coach_id = id
+        print(coach_id)
+        athlete_id = self.request.data['athlete']
+        print(athlete_id)
+        return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
+
