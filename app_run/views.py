@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
-from .models import Run, Position
+from .models import Run, Position, Subscription
 from .serializers import RunSerializer, PositionSerializer, UserSerializer
 from geopy.distance import geodesic
 from django_filters.rest_framework import DjangoFilterBackend
@@ -133,6 +133,10 @@ class SubscribeView(APIView):
             return Response({'message': f'Пользователь c id {coach_id} это не тренер'}, status=status.HTTP_400_BAD_REQUEST)
         if athlete.is_staff:
             return Response({'message': f'Пользователь c id {coach_id} это не бегун'}, status=status.HTTP_400_BAD_REQUEST)
+        if Subscription.objects.filter(coach=coach, athlete=athlete).exists():
+            return Response({'message': 'Такая подписка уже существует'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        Subscription.objects.create(coach=coach, athlete=athlete)
 
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
 
