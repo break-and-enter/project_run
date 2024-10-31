@@ -119,22 +119,25 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.get_serializer(instance)
         print(instance.id, instance.username)
         print(serializer.data)
-
+        my_data = serializer.data
         if not instance.is_staff: # user is athlete
             if Subscription.objects.filter(athlete=instance.id).exists():
                 subscription = Subscription.objects.get(athlete=instance.id)
                 print(subscription.coach.id)
-                my_data = serializer.data
                 my_data['coach'] = subscription.coach.id
-                return Response(my_data)
+            else:
+                my_data['coach'] = ''
+
         else: # user is coach
             if Subscription.objects.filter(coach=instance.id).exists():
                 athletes_list = Subscription.objects.filter(coach=instance.id).values_list('id', flat=True)
                 print(athletes_list)
-                my_data = serializer.data
+
                 my_data['athletes'] = athletes_list
-                return Response(my_data)
-        return Response(serializer.data)
+            else:
+                my_data['athletes'] = []
+
+        return Response(my_data)
 
 
 
