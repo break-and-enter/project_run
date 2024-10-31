@@ -124,12 +124,12 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             if Subscription.objects.filter(athlete=instance.id).exists():
                 subscription = Subscription.objects.get(athlete=instance.id)
                 print(subscription.coach.id)
-                return Response({'coach': subscription.coach.id})
+                return Response({'coach': subscription.coach.id, 'user_data': serializer.data})
         else: # user is coach
             if Subscription.objects.filter(coach=instance.id).exists():
                 athletes_list = Subscription.objects.filter(coach=instance.id).values_list('id', flat=True)
                 print(athletes_list)
-                return Response({'athletes': athletes_list})
+                return Response({'athletes': athletes_list, 'user_data': serializer.data})
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
