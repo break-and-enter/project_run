@@ -10,21 +10,11 @@ class SmallUserSerializer(serializers.ModelSerializer):
 
 
 class RunSerializer(serializers.ModelSerializer):
-    # athlete_data = serializers.SerializerMethodField()
     athlete_data = SmallUserSerializer(source='athlete', read_only=True)
 
     class Meta:
         model = Run
         fields = '__all__'
-
-    # def get_athlete_data(self, obj):
-    #     athlete = obj.athlete
-    #     return {
-    #         'id': athlete.id,
-    #         'username': athlete.username,
-    #         'first_name': athlete.first_name,
-    #         'last_name': athlete.last_name,
-    #         }
 
 
 class PositionSerializer(serializers.ModelSerializer):

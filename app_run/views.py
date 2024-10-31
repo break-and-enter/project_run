@@ -31,6 +31,7 @@ class StatusStartView(APIView):
             return Response({'message': 'Ты чо! Этот забег стартовать нельзя, он уже стартовал'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
 def status_stop_view(request, run_id):
     run = get_object_or_404(Run,id=run_id)
@@ -124,27 +125,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             else:
                 return AthleteSerializer
         return super().get_serializer_class()
-
-    # def retrieve(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     serializer = self.get_serializer(instance)
-    #
-    #     my_data = serializer.data
-    #     if not instance.is_staff: # user is athlete
-    #         if Subscription.objects.filter(athlete=instance.id).exists():
-    #             subscription = Subscription.objects.get(athlete=instance.id)
-    #             my_data['coach'] = subscription.coach.id
-    #         else:
-    #             my_data['coach'] = ''
-    #     else: # user is coach
-    #         if Subscription.objects.filter(coach=instance.id).exists():
-    #             athletes_list = Subscription.objects.filter(coach=instance.id).values_list('athlete__id', flat=True)
-    #             my_data['athletes'] = athletes_list
-    #         else:
-    #             my_data['athletes'] = []
-    #
-    #     return Response(my_data)
-
 
 
 class SubscribeView(APIView):
