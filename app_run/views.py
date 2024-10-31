@@ -117,22 +117,17 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        print(instance.id, instance.username)
-        print(serializer.data)
+
         my_data = serializer.data
         if not instance.is_staff: # user is athlete
             if Subscription.objects.filter(athlete=instance.id).exists():
                 subscription = Subscription.objects.get(athlete=instance.id)
-                print(subscription.coach.id)
                 my_data['coach'] = subscription.coach.id
             else:
                 my_data['coach'] = ''
-
         else: # user is coach
             if Subscription.objects.filter(coach=instance.id).exists():
                 athletes_list = Subscription.objects.filter(coach=instance.id).values_list('athlete__id', flat=True)
-                print(athletes_list)
-
                 my_data['athletes'] = athletes_list
             else:
                 my_data['athletes'] = []
@@ -144,22 +139,13 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class SubscribeView(APIView):
     def post(self, request, id):
         coach_id = id
-        print(coach_id)
         athlete_id = self.request.data['athlete']
-        print(athlete_id)
-        if not User.objects.filter(id=coach_id).exists():
-            return Response({'message': f'Пользователя c id {coach_id} не существует'},
-                            status=status.HTTP_404_NOT_FOUND)
-        if not User.objects.filter(id=athlete_id).exists():
-            return Response({'message': f'Пользователя c id {athlete_id} не существует'},
-                            status=status.HTTP_400_BAD_REQUEST)
-        coach=User.objects.get(id=coach_id)
-        athlete=User.objects.get(id=athlete_id)
+        coach = get_object_or_404(User, id=coach_id)
+        athlete = get_object_or_404(User, id=athlete_id)
+
         if not coach.is_staff:
-        # if coach.type != 'coach':
             return Response({'message': f'Пользователь c id {coach_id} это не тренер'}, status=status.HTTP_400_BAD_REQUEST)
         if athlete.is_staff:
-        # if athlete.type != 'athlete':
             return Response({'message': f'Пользователь c id {coach_id} это не бегун'}, status=status.HTTP_400_BAD_REQUEST)
         if Subscription.objects.filter(coach=coach, athlete=athlete).exists():
             return Response({'message': 'Такая подписка уже существует'},
