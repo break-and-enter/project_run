@@ -134,7 +134,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
                 my_data = serializer.data
                 my_data['athletes'] = athletes_list
                 return Response(my_data)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.data)
 
 
 
