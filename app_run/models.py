@@ -32,3 +32,5 @@ class Subscription(models.Model):
     class Meta:
         unique_together = ('coach', 'athlete')  # Уникальность подписки между двумя пользователями.
 
+    def __str__(self):
+        return f"{self.athlete} подписан на {self.coach}"

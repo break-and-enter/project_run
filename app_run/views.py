@@ -130,7 +130,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
         else: # user is coach
             if Subscription.objects.filter(coach=instance.id).exists():
-                athletes_list = Subscription.objects.filter(coach=instance.id).values_list('id', flat=True)
+                athletes_list = Subscription.objects.filter(coach=instance.id).values_list('athlete__id', flat=True)
                 print(athletes_list)
 
                 my_data['athletes'] = athletes_list
