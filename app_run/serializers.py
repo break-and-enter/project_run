@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Run, Position
+from .models import Run, Position, Subscription
 from django.contrib.auth.models import User
 
 
@@ -52,7 +52,6 @@ class PositionSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
-    # runs_finished = serializers.SerializerMethodField()
     runs_finished = serializers.IntegerField()
     class Meta:
         model = User
@@ -64,10 +63,28 @@ class UserSerializer(serializers.ModelSerializer):
         else:
             return 'athlete'
 
-    # def get_runs_finished(self, obj):
-    #     user_id = obj.id
-    #     runs_finished = Run.objects.filter(athlete=user_id, status='finished').count()
-    #
-    #     return runs_finished
+
+class AthleteSerializer(UserSerializer):
+    coach = serializers.SerializerMethodField()
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + ['coach']
+
+    def get_coach(self, obj):
+        if Subscription.objects.filter(athlete=obj.id).exists():
+            subscription = Subscription.objects.get(athlete=obj.id)
+            return subscription.coach.id
+        return ''
 
 
+class CoachSerializer(UserSerializer):
+    athletes = serializers.SerializerMethodField()
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + ['athletes']
+
+    def get_athletes(self, obj):
+        if Subscription.objects.filter(coach=obj.id).exists():
+            athletes_list = Subscription.objects.filter(coach=obj.id).values_list('athlete__id', flat=True)
+            return athletes_list
+        return []

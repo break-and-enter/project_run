@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
 from .models import Run, Position, Subscription
-from .serializers import RunSerializer, PositionSerializer, UserSerializer
+from .serializers import RunSerializer, PositionSerializer, UserSerializer, AthleteSerializer, CoachSerializer
 from geopy.distance import geodesic
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
@@ -114,25 +114,36 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         qs = qs.annotate(runs_finished=Count('run', filter=Q(run__status='finished')))
         return qs
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-
-        my_data = serializer.data
-        if not instance.is_staff: # user is athlete
-            if Subscription.objects.filter(athlete=instance.id).exists():
-                subscription = Subscription.objects.get(athlete=instance.id)
-                my_data['coach'] = subscription.coach.id
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return UserSerializer
+        elif self.action == 'retrieve':
+            user = self.get_object() # крутой метод! почему я его не знал!!
+            if user.is_staff:
+                return CoachSerializer
             else:
-                my_data['coach'] = ''
-        else: # user is coach
-            if Subscription.objects.filter(coach=instance.id).exists():
-                athletes_list = Subscription.objects.filter(coach=instance.id).values_list('athlete__id', flat=True)
-                my_data['athletes'] = athletes_list
-            else:
-                my_data['athletes'] = []
+                return AthleteSerializer
+        return super().get_serializer_class()
 
-        return Response(my_data)
+    # def retrieve(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance)
+    #
+    #     my_data = serializer.data
+    #     if not instance.is_staff: # user is athlete
+    #         if Subscription.objects.filter(athlete=instance.id).exists():
+    #             subscription = Subscription.objects.get(athlete=instance.id)
+    #             my_data['coach'] = subscription.coach.id
+    #         else:
+    #             my_data['coach'] = ''
+    #     else: # user is coach
+    #         if Subscription.objects.filter(coach=instance.id).exists():
+    #             athletes_list = Subscription.objects.filter(coach=instance.id).values_list('athlete__id', flat=True)
+    #             my_data['athletes'] = athletes_list
+    #         else:
+    #             my_data['athletes'] = []
+    #
+    #     return Response(my_data)
 
 
 
