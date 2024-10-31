@@ -114,6 +114,25 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         qs = qs.annotate(runs_finished=Count('run', filter=Q(run__status='finished')))
         return qs
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        print(instance.id, instance.username)
+        print(serializer.data)
+
+        if not instance.is_staff: # user is athlete
+            if Subscription.objects.filter(athlete=instance.id).exists():
+                subscription = Subscription.objects.get(athlete=instance.id)
+                print(subscription.coach.id)
+                return Response({'coach': subscription.coach.id})
+        else: # user is coach
+            if Subscription.objects.filter(coach=instance.id).exists():
+                athletes_list = Subscription.objects.filter(coach=instance.id).values_list('id', flat=True)
+                print(athletes_list)
+                return Response({'athletes': athletes_list})
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 
 class SubscribeView(APIView):
     def post(self, request, id):
