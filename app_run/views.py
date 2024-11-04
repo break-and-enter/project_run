@@ -5,8 +5,9 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
-from .models import Run, Position, Subscription
-from .serializers import RunSerializer, PositionSerializer, UserSerializer, AthleteSerializer, CoachSerializer
+from .models import Run, Position, Subscription, Challenge
+from .serializers import RunSerializer, PositionSerializer, UserSerializer, AthleteSerializer, CoachSerializer, \
+    ChallengeSerializer
 from geopy.distance import geodesic
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
@@ -55,6 +56,8 @@ def status_stop_view(request, run_id):
             run.speed = round(average_speed['speed__avg'], 2)
         run.save()
         #-------------------------------------------
+        if Run.objects.filter(status='finished').count() == 10:
+            Challenge.objects.create(full_name = 'Челлендж 10 забегов!', athlete=run.athlete)
 
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
     else:
@@ -149,3 +152,7 @@ class SubscribeView(APIView):
 
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
 
+
+class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Challenge.objects.all()
+    serializer_class = ChallengeSerializer

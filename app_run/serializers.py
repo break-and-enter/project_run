@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Run, Position, Subscription
+from .models import Run, Position, Subscription, Challenge
 from django.contrib.auth.models import User
 
 
@@ -74,7 +74,11 @@ class CoachSerializer(UserSerializer):
         fields = UserSerializer.Meta.fields + ['athletes']
 
     def get_athletes(self, obj):
-        if Subscription.objects.filter(coach=obj.id).exists():
-            athletes_list = Subscription.objects.filter(coach=obj.id).values_list('athlete__id', flat=True)
-            return athletes_list
-        return []
+        #Возвращает пустой список если ничего не найдено удовлетворяющее фильтру
+        athletes_list = Subscription.objects.filter(coach=obj.id).values_list('athlete__id', flat=True)
+        return athletes_list
+
+class ChallengeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Challenge
+        fields = '__all__'

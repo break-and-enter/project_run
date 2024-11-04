@@ -30,7 +30,11 @@ class Subscription(models.Model):
     athlete = models.ForeignKey(User, on_delete=models.CASCADE, related_name='coaches')
 
     class Meta:
-        unique_together = ('coach', 'athlete')  # Уникальность подписки между двумя пользователями.
+        unique_together = ['coach', 'athlete']  # Уникальность подписки между двумя пользователями.
 
     def __str__(self):
         return f"{self.athlete} подписан на {self.coach}"
+
+class Challenge(models.Model):
+    full_name = models.CharField(max_length=100, default='')
+    athlete = models.ForeignKey(User, on_delete=models.CASCADE)

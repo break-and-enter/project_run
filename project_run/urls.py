@@ -20,13 +20,14 @@ from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from app_run.views import RunViewSet, StatusStartView, status_stop_view, company_details, PositionViewSet, \
-    UserViewSet, SubscribeView
+    UserViewSet, SubscribeView, ChallengeViewSet
 
 router = DefaultRouter()
 router.register(r'api/runs', RunViewSet)
 router.register(r'api/positions', PositionViewSet)
 router.register(r'api/users', UserViewSet)
-# router.register(r'api/subscribe_to_coach', SubscribeViewSet)
+router.register(r'api/challenges', ChallengeViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
