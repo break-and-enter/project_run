@@ -56,8 +56,8 @@ def status_stop_view(request, run_id):
             run.speed = round(average_speed['speed__avg'], 2)
         run.save()
         #-------------------------------------------
-        if Run.objects.filter(status='finished').count() == 10:
-            Challenge.objects.create(full_name = 'Челлендж 10 забегов!', athlete=run.athlete)
+        if Run.objects.filter(status='finished').count() >= 10:
+            challenge, created = Challenge.objects.get_or_create(full_name = 'Челлендж 10 забегов!', athlete=run.athlete)
 
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
     else:
@@ -161,6 +161,9 @@ class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
         qs = self.queryset
         athlete_id = self.request.query_params.get('athlete')
         number_of_runs = Run.objects.filter(athlete=athlete_id).count()
+        # if athlete_id:
+        #     athlete=User.objects.get(id=athlete_id)
+        #     print(athlete.runs_finished)
         # print(athlete_id, number_of_runs)
         if athlete_id and number_of_runs>=10:
             qs = qs.filter(athlete=athlete_id)
