@@ -156,3 +156,10 @@ class SubscribeView(APIView):
 class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Challenge.objects.all()
     serializer_class = ChallengeSerializer
+
+    def get_queryset(self):
+        qs = self.queryset
+        athlete_id = self.request.query_params.get('athlete')
+        if athlete_id:
+            qs = qs.filter(athlete=athlete_id)
+        return qs
