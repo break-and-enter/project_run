@@ -160,6 +160,10 @@ class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         qs = self.queryset
         athlete_id = self.request.query_params.get('athlete')
-        if athlete_id:
+        number_of_runs = Run.objects.filter(athlete=athlete_id).count()
+        if athlete_id and number_of_runs>=10:
             qs = qs.filter(athlete=athlete_id)
-        return qs
+            return qs
+        else:
+            return Response({'message': 'Нет 10 забегов или нет такого бегуна'},
+                            status=status.HTTP_404_NOT_FOUND)
