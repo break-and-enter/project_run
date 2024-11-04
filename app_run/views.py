@@ -165,5 +165,4 @@ class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.filter(athlete=athlete_id)
             return qs
         else:
-            return Response({'message': 'Нет 10 забегов или нет такого бегуна'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return []
