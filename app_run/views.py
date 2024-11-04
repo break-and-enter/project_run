@@ -57,7 +57,7 @@ def status_stop_view(request, run_id):
         run.save()
         #-------------------------------------------
         if Run.objects.filter(status='finished').count() >= 10:
-            challenge, created = Challenge.objects.get_or_create(full_name = 'Челлендж 10 забегов!', athlete=run.athlete)
+            challenge, created = Challenge.objects.get_or_create(full_name = 'Сделай 10 Забегов!', athlete=run.athlete)
 
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
     else:
