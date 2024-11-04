@@ -160,13 +160,11 @@ class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         qs = self.queryset
         athlete_id = self.request.query_params.get('athlete')
-        number_of_runs = Run.objects.filter(athlete=athlete_id).count()
-        # if athlete_id:
-        #     athlete=User.objects.get(id=athlete_id)
-        #     print(athlete.runs_finished)
-        # print(athlete_id, number_of_runs)
-        if athlete_id and number_of_runs>=10:
+        number_of_runs = 0
+        if athlete_id:
+            number_of_runs = Run.objects.filter(athlete=athlete_id).count()
+        if number_of_runs>=10:
             qs = qs.filter(athlete=athlete_id)
             return qs
         else:
-            return []
+            return Challenge.objects.none()
