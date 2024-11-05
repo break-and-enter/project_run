@@ -56,7 +56,7 @@ def status_stop_view(request, run_id):
             run.speed = round(average_speed['speed__avg'], 2)
         run.save()
         #-------------------------------------------
-        if Run.objects.filter(status='finished').count() >= 10:
+        if Run.objects.filter(status='finished', athlete=run.athlete).count() >= 10:
             challenge, created = Challenge.objects.get_or_create(full_name = 'Сделай 10 Забегов!', athlete=run.athlete)
 
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
