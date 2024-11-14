@@ -61,7 +61,7 @@ def status_stop_view(request, run_id):
         #-------------------------------------------
         distance_sum = Run.objects.filter(status='finished', athlete=run.athlete).aggregate(Sum('distance'))
 
-        if distance_sum >= 50:
+        if distance_sum['distance__sum'] >= 50:
             challenge, created = Challenge.objects.get_or_create(full_name = 'Пробеги 50 километров!', athlete=run.athlete)
         #-------------------------------------------
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
