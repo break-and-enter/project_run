@@ -1,4 +1,4 @@
-from django.db.models import Avg, Count, Q
+from django.db.models import Avg, Count, Q, Sum
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
@@ -58,7 +58,12 @@ def status_stop_view(request, run_id):
         #-------------------------------------------
         if Run.objects.filter(status='finished', athlete=run.athlete).count() >= 10:
             challenge, created = Challenge.objects.get_or_create(full_name = 'Сделай 10 Забегов!', athlete=run.athlete)
+        #-------------------------------------------
+        distance_sum = Run.objects.filter(status='finished', athlete=run.athlete).aggregate(Sum('distance'))
 
+        if distance_sum >= 50:
+            challenge, created = Challenge.objects.get_or_create(full_name = 'Пробеги 50 километров!', athlete=run.athlete)
+        #-------------------------------------------
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
     else:
         return Response({'message': 'Ты чо! Этот забег финишировать нельзя, он еще не стартовал или уже завершен'},

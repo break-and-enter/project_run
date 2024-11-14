@@ -17,6 +17,9 @@ class Run(models.Model):
     speed = models.FloatField(default=0)
     run_time_seconds = models.IntegerField(default=0)
 
+    def __str__(self):
+        return f'{self.athlete} - {self.status}'
+
 class Position(models.Model):
     latitude = models.DecimalField(decimal_places=4, max_digits=7)
     longitude = models.DecimalField(decimal_places=4, max_digits=8)
