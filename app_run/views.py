@@ -181,4 +181,4 @@ class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(['GET'])
 def challenge_summary_view(request):
-    return Response({'message': 'Все хорошо прекрасная маркиза'})
+    return Response([{'name_to_display': 'FFFF', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]}])
