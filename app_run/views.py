@@ -64,6 +64,9 @@ def status_stop_view(request, run_id):
         if distance_sum['distance__sum'] >= 50:
             challenge, created = Challenge.objects.get_or_create(full_name = 'Пробеги 50 километров!', athlete=run.athlete)
         #-------------------------------------------
+        if run.distance >= 2 and run.run_time_seconds <= 600:
+            challenge, created = Challenge.objects.get_or_create(full_name='Быстро бегаешь, гад!',
+                                                                 athlete=run.athlete)
         return Response({'message': 'Все ништяк'}, status=status.HTTP_200_OK)
     else:
         return Response({'message': 'Ты чо! Этот забег финишировать нельзя, он еще не стартовал или уже завершен'},
