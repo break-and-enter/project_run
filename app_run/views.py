@@ -179,6 +179,6 @@ class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
     #     else:
     #         return Challenge.objects.none()
 
-@api_view(['POST'])
+@api_view(['GET'])
 def challenge_summary_view(request):
     return Response({'message': 'Все хорошо прекрасная маркиза'})
