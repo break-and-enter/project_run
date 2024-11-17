@@ -181,6 +181,15 @@ class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(['GET'])
 def challenge_summary_view(request):
+    challenges_queryset = Challenge.objects.select_related('athlete').all()
+    for i in challenges_queryset:
+        print(i)
+
+    user_queryset = User.objects.filter(challenge__id=5)
+    print((user_queryset))
+    #     athletes_list = []
+    #     athletes_list =
+    #     final_list.append({'name_to_display': i.full_name, 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]})
     return Response([{'name_to_display': 'Сделай 10 Забегов!', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]},
                      {'name_to_display': 'Пробеги 50 километров!', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]},
                      {'name_to_display': 'Пробеги 2 километра меньше чем за 10 минут!',

@@ -41,3 +41,6 @@ class Subscription(models.Model):
 class Challenge(models.Model):
     full_name = models.CharField(max_length=100, default='')
     athlete = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.athlete} - {self.full_name}'
