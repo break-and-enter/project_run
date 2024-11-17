@@ -181,4 +181,8 @@ class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(['GET'])
 def challenge_summary_view(request):
-    return Response([{'name_to_display': 'FFFF', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]}])
+    return Response([{'name_to_display': 'Сделай 10 Забегов!', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]},
+                     {'name_to_display': 'Пробеги 50 километров!', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]},
+                     {'name_to_display': 'Пробеги 2 километра меньше чем за 10 минут!',
+                      'athletes': [{'id': 3, 'full_name': 'иван иванович'}]}
+                     ])
