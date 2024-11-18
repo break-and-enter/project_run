@@ -181,18 +181,27 @@ class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(['GET'])
 def challenge_summary_view(request):
-    challenges_queryset = Challenge.objects.select_related('athlete').all()
-    for i in challenges_queryset:
-        print(i)
+    # Получим список уникальных названий челленджей
+    unique_challenges = Challenge.objects.values('full_name').distinct()
+    unique_name_list = [i['full_name'] for i in unique_challenges]
+    print(unique_name_list)
 
-    user_queryset = User.objects.filter(challenge__id=5)
-    print((user_queryset))
-    print('test')
-    #     athletes_list = []
-    #     athletes_list =
-    #     final_list.append({'name_to_display': i.full_name, 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]})
-    return Response([{'name_to_display': 'Сделай 10 Забегов!', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]},
-                     {'name_to_display': 'Пробеги 50 километров!', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]},
-                     {'name_to_display': 'Пробеги 2 километра меньше чем за 10 минут!',
-                      'athletes': [{'id': 3, 'full_name': 'иван иванович'}]}
-                     ])
+    #Получим список атлетов для каждого челленджа
+    final_list = []
+    for challenge_name in unique_name_list:
+        user_queryset = User.objects.filter(challenge__full_name=challenge_name)
+        # print(challenge_name, user_queryset)
+        athletes_list = []
+        for athlete in user_queryset:
+            athletes_list.append({'id': athlete.id, 'full_name': f'{athlete.first_name} {athlete.last_name}'})
+
+        final_list.append({'name_to_display':challenge_name, 'athletes':athletes_list})
+
+    print(final_list)
+    return Response(final_list)
+
+    # return Response([{'name_to_display': 'Сделай 10 Забегов!', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]},
+    #                  {'name_to_display': 'Пробеги 50 километров!', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]},
+    #                  {'name_to_display': 'Пробеги 2 километра меньше чем за 10 минут!',
+    #                   'athletes': [{'id': 3, 'full_name': 'иван иванович'}]}
+    #                  ])
