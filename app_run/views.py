@@ -187,6 +187,7 @@ def challenge_summary_view(request):
 
     user_queryset = User.objects.filter(challenge__id=5)
     print((user_queryset))
+    print('test')
     #     athletes_list = []
     #     athletes_list =
     #     final_list.append({'name_to_display': i.full_name, 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]})
