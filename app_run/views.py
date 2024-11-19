@@ -218,15 +218,15 @@ class CoachRatingView(APIView):
                             status=status.HTTP_404_NOT_FOUND)
 
         user_coach = User.objects.get(id=coach_id)
-        if not user_coach.is_staff:
-            return Response({'message': f'Пользователь с coach_id {coach_id} это не тренер'},
-                            status=status.HTTP_404_NOT_FOUND)
-
-        # serializer = UserSerializer(user_coach)
-        # user_type = serializer.data['type']
-        # if user_type != 'coach':
+        # if not user_coach.is_staff:
         #     return Response({'message': f'Пользователь с coach_id {coach_id} это не тренер'},
         #                     status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(user_coach)
+        user_type = serializer.data['type']
+        if user_type != 'coach':
+            return Response({'message': f'Пользователь с coach_id {coach_id} это не тренер'},
+                            status=status.HTTP_404_NOT_FOUND)
 
         if Subscription.objects.filter(coach=coach_id, athlete=athlete_id).exists():
             subscription = Subscription.objects.get(coach=coach_id, athlete=athlete_id)
