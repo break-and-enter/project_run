@@ -196,8 +196,7 @@ class CoachRatingView(APIView):
     def post(self, request, coach_id):
         athlete_id = request.data.get('athlete')
         rating = request.data.get('rating')
-        if not athlete_id or not rating or int(rating)<1 or int(rating)>5:
-            print('rating1', rating)
+        if not athlete_id or not rating or rating not in ['1', '2', '3', '4', '5'] :
             return Response({'message': f'Либо нет rating и athlete_id, либо rating не в пределах от 1 до 5'},
                             status=status.HTTP_400_BAD_REQUEST)
 
