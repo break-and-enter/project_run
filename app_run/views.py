@@ -173,7 +173,6 @@ def challenge_summary_view(request):
     # Получим список уникальных названий челленджей
     unique_challenges = Challenge.objects.values('full_name').distinct()
     unique_name_list = [i['full_name'] for i in unique_challenges]
-    print(unique_name_list)
 
     #Получим список атлетов для каждого челленджа
     final_list = []
@@ -185,7 +184,6 @@ def challenge_summary_view(request):
 
         final_list.append({'name_to_display':challenge_name, 'athletes':athletes_list})
 
-    print(final_list)
     return Response(final_list)
 
     # return Response([{'name_to_display': 'Сделай 10 Забегов!', 'athletes': [{'id': 3, 'full_name': 'иван иванович'}]},
