@@ -218,5 +218,5 @@ class CoachRatingView(APIView):
         else:
 
             return Response({'message':f'Бегун c id {athlete_id} не подписан на тренера с id {coach_id}'},
-                            status=status.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_404_NOT_FOUND)
         return Response({'message': 'ОК'})
