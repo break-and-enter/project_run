@@ -213,12 +213,16 @@ class CoachRatingView(APIView):
             return Response({'message': f'Пользователя с coach_id {coach_id} не существует'},
                             status=status.HTTP_404_NOT_FOUND)
 
-        if not User.objects.filter(id=athlete_id):
+        if not User.objects.filter(id=athlete_id).exists():
             return Response({'message': f'Пользователя с athlete_id {athlete_id} не существует'},
                             status=status.HTTP_404_NOT_FOUND)
 
         user_coach = User.objects.get(id=coach_id)
         if not user_coach.is_staff:
+            return Response({'message': f'Пользователь с coach_id {coach_id} это не тренер'},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        if user_coach.type != 'coach':
             return Response({'message': f'Пользователь с coach_id {coach_id} это не тренер'},
                             status=status.HTTP_404_NOT_FOUND)
 
