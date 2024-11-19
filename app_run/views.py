@@ -209,7 +209,7 @@ class CoachRatingView(APIView):
         if not 1<= int(rating) <=5:
             return Response({'message': f'rating не в пределах от 1 до 5. Ваше значение {rating}'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not User.objects.get(id=coach_id).exists():
+        if not User.objects.filter(id=coach_id).exists():
             return Response({'message': f'Тренера с id {coach_id} не существует'},
                             status=status.HTTP_404_NOT_FOUND)
 
