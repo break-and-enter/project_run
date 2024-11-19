@@ -205,7 +205,7 @@ class CoachRatingView(APIView):
         # if not rating.isdigit():
         #     return Response({'message': f'rating должен быть цифрой'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if 1<= int(rating) <=5:
+        if not 1<= int(rating) <=5:
             return Response({'message': f'rating не в пределах от 1 до 5. Ваше значение {rating}'}, status=status.HTTP_400_BAD_REQUEST)
 
         # print(athlete_id)
