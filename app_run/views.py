@@ -202,6 +202,10 @@ class CoachRatingView(APIView):
         if not rating:
             return Response({'message': f'Нет поля rating'}, status=status.HTTP_400_BAD_REQUEST)
 
+        if isinstance(rating, str) and not rating.isdigit():
+            return Response({'message': f'У вас rating не цифра. Ваше значение {rating}'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
         if not 1<= int(rating) <=5:
             return Response({'message': f'rating не в пределах от 1 до 5. Ваше значение {rating}'}, status=status.HTTP_400_BAD_REQUEST)
 
