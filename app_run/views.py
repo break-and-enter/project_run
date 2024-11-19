@@ -209,15 +209,22 @@ class CoachRatingView(APIView):
         if not 1<= int(rating) <=5:
             return Response({'message': f'rating не в пределах от 1 до 5. Ваше значение {rating}'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not User.objects.filter(id=coach_id, is_staff=True).exists():
-            return Response({'message': f'Тренера с id {coach_id} не существует'},
+
+        if not User.objects.filter(id=coach_id):
+            return Response({'message': f'Пользователя с coach_id {coach_id} не существует'},
                             status=status.HTTP_404_NOT_FOUND)
 
+        if not User.objects.filter(id=athlete_id):
+            return Response({'message': f'Пользователя с athlete_id {athlete_id} не существует'},
+                            status=status.HTTP_404_NOT_FOUND)
 
+        user_coach = User.objects.get(id=coach_id)
+        if not user_coach.is_staff:
+            return Response({'message': f'Пользователь с coach_id {coach_id} это не тренер'},
+                            status=status.HTTP_404_NOT_FOUND)
 
         if Subscription.objects.filter(coach=coach_id, athlete=athlete_id).exists():
             subscription = Subscription.objects.get(coach=coach_id, athlete=athlete_id)
-
             subscription.rating = rating
             subscription.save()
         else:
