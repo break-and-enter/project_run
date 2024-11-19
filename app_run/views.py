@@ -196,20 +196,23 @@ class CoachRatingView(APIView):
     def post(self, request, coach_id):
         athlete_id = request.data.get('athlete')
         rating = request.data.get('rating')
-        if not athlete_id or not rating:
-            return Response({'message': f'Недостаточно данных, нужно передать rating и athlete_id'},
+        if not athlete_id or not rating or int(rating)<1 or int(rating)>5:
+            print('rating1', rating)
+            return Response({'message': f'Либо нет rating и athlete_id, либо rating не в пределах от 1 до 5'},
                             status=status.HTTP_400_BAD_REQUEST)
 
         # print(athlete_id)
         if Subscription.objects.filter(coach=coach_id, athlete=athlete_id).exists():
             subscription = Subscription.objects.get(coach=coach_id, athlete=athlete_id)
-            if rating and 1<= int(rating) <=5:
-                subscription.rating = rating
-                subscription.save()
-            else:
-                return Response({'message': f'rating должен быть от 1 до 5. Вы передали {rating} '},
-                                status=status.HTTP_400_BAD_REQUEST)
+            # if rating and 1<= int(rating) <=5:
+            subscription.rating = rating
+            subscription.save()
+            # else:
+            #     print('rating2', rating)
+            #     return Response({'message': f'rating должен быть от 1 до 5. Вы передали {rating} '},
+            #                     status=status.HTTP_400_BAD_REQUEST)
         else:
+            print('rating3', rating)
             return Response({'message':f'Бегун c id {athlete_id} не подписан на тренера с id {coach_id}'},
                             status=status.HTTP_400_BAD_REQUEST)
         return Response({'message': 'ОК'})
