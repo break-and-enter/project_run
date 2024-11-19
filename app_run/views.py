@@ -167,17 +167,6 @@ class ChallengeViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['athlete']
 
-    # def get_queryset(self):
-    #     qs = self.queryset
-    #     athlete_id = self.request.query_params.get('athlete')
-    #     number_of_runs = 0
-    #     if athlete_id:
-    #         number_of_runs = Run.objects.filter(athlete=athlete_id, status='finished').count()
-    #     if number_of_runs>=10:
-    #         qs = qs.filter(athlete=athlete_id)
-    #         return qs
-    #     else:
-    #         return Challenge.objects.none()
 
 @api_view(['GET'])
 def challenge_summary_view(request):
@@ -190,7 +179,6 @@ def challenge_summary_view(request):
     final_list = []
     for challenge_name in unique_name_list:
         user_queryset = User.objects.filter(challenge__full_name=challenge_name)
-        # print(challenge_name, user_queryset)
         athletes_list = []
         for athlete in user_queryset:
             athletes_list.append({'id': athlete.id, 'full_name': f'{athlete.first_name} {athlete.last_name}'})
@@ -205,3 +193,20 @@ def challenge_summary_view(request):
     #                  {'name_to_display': 'Пробеги 2 километра меньше чем за 10 минут!',
     #                   'athletes': [{'id': 3, 'full_name': 'иван иванович'}]}
     #                  ])
+
+class CoachRatingView(APIView):
+    def post(self, request, coach_id):
+        # print(coach_id)
+        athlete_id = self.request.data['athlete']
+        # print(athlete_id)
+        if Subscription.objects.filter(coach=coach_id, athlete=athlete_id).exists():
+            subscription = Subscription.objects.get(coach=coach_id, athlete=athlete_id)
+            print(subscription)
+            rating = self.request.data['rating']
+            if rating:
+                subscription.rating = rating
+                subscription.save()
+        else:
+            return Response({'message':f'Бегун c id {athlete_id} не подписан на тренера с id {coach_id}'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        return Response()
