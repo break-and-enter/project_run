@@ -2,6 +2,7 @@ from django.db.models import Avg
 from rest_framework import serializers
 from .models import Run, Position, Subscription, Challenge
 from django.contrib.auth.models import User
+from django.db import connection
 
 
 class SmallUserSerializer(serializers.ModelSerializer):
@@ -57,7 +58,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_rating(self, obj):
         if obj.is_staff:
+            initial_queries = len(connection.queries)
             result = Subscription.objects.filter(coach=obj.id).aggregate(Avg('rating'))
+            final_queries = len(connection.queries)
+            print(f"Количество запросов: {final_queries - initial_queries}")
             return result['rating__avg']
         return None
 

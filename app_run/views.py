@@ -11,6 +11,7 @@ from .serializers import RunSerializer, PositionSerializer, UserSerializer, Athl
 from geopy.distance import geodesic
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
+from django.db import connection
 
 
 class RunViewSet(viewsets.ModelViewSet):
@@ -191,7 +192,7 @@ class CoachRatingView(APIView):
     def post(self, request, coach_id):
         athlete_id = request.data.get('athlete')
         rating = request.data.get('rating')
-
+        initial_queries = len(connection.queries)
         user_coach = get_object_or_404(User, id=coach_id)
 
         if not athlete_id:
@@ -216,4 +217,7 @@ class CoachRatingView(APIView):
         else:
             return Response({'message':f'Бегун c id {athlete_id} не подписан на тренера с id {coach_id}'},
                             status=status.HTTP_400_BAD_REQUEST)
+        final_queries = len(connection.queries)
+        print(f"Количество запросов: {final_queries - initial_queries}")
+        print(connection.queries)
         return Response({'message': 'ОК'})
