@@ -196,6 +196,16 @@ class CoachRatingView(APIView):
     def post(self, request, coach_id):
         athlete_id = request.data.get('athlete')
         rating = request.data.get('rating')
+
+        if not User.objects.filter(id=coach_id).exists():
+            return Response({'message': f'Пользователя с coach_id {coach_id} не существует'},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        user_coach = User.objects.get(id=coach_id)
+        if not user_coach.is_staff:
+            return Response({'message': f'Пользователь с coach_id {coach_id} это не тренер'},
+                            status=status.HTTP_404_NOT_FOUND)
+
         if not athlete_id:
             return Response({'message': f'Нет поля athlete_id'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -209,18 +219,13 @@ class CoachRatingView(APIView):
         if not 1<= int(rating) <=5:
             return Response({'message': f'rating не в пределах от 1 до 5. Ваше значение {rating}'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not User.objects.filter(id=coach_id).exists():
-            return Response({'message': f'Пользователя с coach_id {coach_id} не существует'},
-                            status=status.HTTP_404_NOT_FOUND)
+
 
         if not User.objects.filter(id=athlete_id).exists():
             return Response({'message': f'Пользователя с athlete_id {athlete_id} не существует'},
                             status=status.HTTP_404_NOT_FOUND)
 
-        user_coach = User.objects.get(id=coach_id)
-        if not user_coach.is_staff:
-            return Response({'message': f'Пользователь с coach_id {coach_id} это не тренер'},
-                            status=status.HTTP_404_NOT_FOUND)
+
 
         # serializer = UserSerializer(user_coach)
         # user_type = serializer.data['type']
