@@ -125,6 +125,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         if user_type and user_type=='athlete':
             qs = qs.filter(is_staff=False)
         qs = qs.annotate(runs_finished=Count('run', filter=Q(run__status='finished')))
+        qs = qs.annotate(rating=Avg('athletes__rating'))
         return qs
 
     def get_serializer_class(self):
