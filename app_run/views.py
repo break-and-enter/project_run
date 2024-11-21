@@ -118,6 +118,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['first_name', 'last_name']
 
     def get_queryset(self):
+
         qs = self.queryset
         user_type = self.request.query_params.get('type')
         if user_type and user_type=='coach':
@@ -125,7 +126,8 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         if user_type and user_type=='athlete':
             qs = qs.filter(is_staff=False)
         qs = qs.annotate(runs_finished=Count('run', filter=Q(run__status='finished')))
-        qs = qs.annotate(rating=Avg('athletes__rating'))
+        # qs = qs.annotate(rating=Avg('athletes__rating')) # Вариант №1, поле rating вычисляется и добавляется здесь
+
         return qs
 
     def get_serializer_class(self):
@@ -193,7 +195,7 @@ class CoachRatingView(APIView):
     def post(self, request, coach_id):
         athlete_id = request.data.get('athlete')
         rating = request.data.get('rating')
-        initial_queries = len(connection.queries)
+
         user_coach = get_object_or_404(User, id=coach_id)
 
         if not athlete_id:
@@ -218,7 +220,5 @@ class CoachRatingView(APIView):
         else:
             return Response({'message':f'Бегун c id {athlete_id} не подписан на тренера с id {coach_id}'},
                             status=status.HTTP_400_BAD_REQUEST)
-        final_queries = len(connection.queries)
-        print(f"Количество запросов: {final_queries - initial_queries}")
-        print(connection.queries)
+
         return Response({'message': 'ОК'})

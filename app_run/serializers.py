@@ -41,11 +41,26 @@ class PositionSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('longitude должен быть в диапазоне от -180.0 до +180.0 градусов')
         return value
 
+# Вариант № 1, где поле rating добавляется и вычисляется в get_queryset
+# class UserSerializer(serializers.ModelSerializer):
+#     type = serializers.SerializerMethodField()
+#     runs_finished = serializers.IntegerField()
+#     rating = serializers.FloatField()
+#     class Meta:
+#         model = User
+#         fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished', 'rating']
+#
+#     def get_type(self, obj):
+#         if obj.is_staff:
+#             return 'coach'
+#         else:
+#             return 'athlete'
 
+# Вариант №2, где поле rating добавляется и вычисляется здесь, в сериалайзере.
 class UserSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     runs_finished = serializers.IntegerField()
-    rating = serializers.FloatField()
+    rating = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished', 'rating']
@@ -56,14 +71,11 @@ class UserSerializer(serializers.ModelSerializer):
         else:
             return 'athlete'
 
-    # def get_rating(self, obj):
-    #     if obj.is_staff:
-    #         initial_queries = len(connection.queries)
-    #         result = Subscription.objects.filter(coach=obj.id).aggregate(Avg('rating'))
-    #         final_queries = len(connection.queries)
-    #         print(f"Количество запросов: {final_queries - initial_queries}")
-    #         return result['rating__avg']
-    #     return None
+    def get_rating(self, obj):
+        if obj.is_staff:
+            result = Subscription.objects.filter(coach=obj.id).aggregate(Avg('rating'))
+            return result['rating__avg']
+        return None
 
 
 class AthleteSerializer(UserSerializer):
