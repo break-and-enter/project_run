@@ -225,7 +225,7 @@ class CoachRatingView(APIView):
 
 
 class AnalyticsCoachView(APIView):
-    def post(self, request, coach_id):
+    def get(self, request, coach_id):
         # longest_run_queryset = Run.objects.filter(athlete__subscription_set__athletes=coach_id).aggregate(Max('distance'))
         coach_queryset = Subscription.objects.filter(coach=coach_id)
         longest_run_dict = coach_queryset.aggregate(Max('athlete__run__distance'))
