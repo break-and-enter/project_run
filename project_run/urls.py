@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from app_run.views import RunViewSet, StatusStartView, status_stop_view, company_details, PositionViewSet, \
-    UserViewSet, SubscribeView, ChallengeViewSet, challenge_summary_view, CoachRatingView
+    UserViewSet, SubscribeView, ChallengeViewSet, challenge_summary_view, CoachRatingView, AnalyticsCoachView
 
 router = DefaultRouter()
 router.register(r'api/runs', RunViewSet)
@@ -37,5 +37,6 @@ urlpatterns = [
     path('api/subscribe_to_coach/<int:id>/', SubscribeView.as_view()),
     path('api/challenges_summary/', challenge_summary_view),
     path('api/rate_coach/<int:coach_id>/', CoachRatingView.as_view()),
+    path('api/analytics_for_coach/<int:coach_id>/', AnalyticsCoachView.as_view()),
     path('', include(router.urls)),
 ]

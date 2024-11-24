@@ -1,4 +1,4 @@
-from django.db.models import Avg, Count, Q, Sum
+from django.db.models import Avg, Count, Q, Sum, Max
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
@@ -126,7 +126,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         if user_type and user_type=='athlete':
             qs = qs.filter(is_staff=False)
         qs = qs.annotate(runs_finished=Count('run', filter=Q(run__status='finished')))
-        # qs = qs.annotate(rating=Avg('athletes__rating')) # Вариант №1, поле rating вычисляется и добавляется здесь
+        qs = qs.annotate(rating=Avg('athletes__rating')) # Вариант №1, поле rating вычисляется и добавляется здесь
 
         return qs
 
@@ -222,3 +222,13 @@ class CoachRatingView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'message': 'ОК'})
+
+
+class AnalyticsCoachView(APIView):
+    def post(self, request, coach_id):
+        # longest_run_queryset = Run.objects.filter(athlete__subscription_set__athletes=coach_id).aggregate(Max('distance'))
+        coach_queryset = Subscription.objects.filter(coach=coach_id)
+        longest_run_dict = coach_queryset.aggregate(Max('athlete__run__distance'))
+        # print(longest_run_dict['athlete__run__distance__max'])
+        # print(User.objects.filter(is_staff=True).values())
+        return Response({'longest_run_value':longest_run_dict['athlete__run__distance__max']})
