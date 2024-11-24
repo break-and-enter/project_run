@@ -229,6 +229,10 @@ class AnalyticsCoachView(APIView):
         # longest_run_queryset = Run.objects.filter(athlete__subscription_set__athletes=coach_id).aggregate(Max('distance'))
         coach_queryset = Subscription.objects.filter(coach=coach_id)
         longest_run_dict = coach_queryset.aggregate(Max('athlete__run__distance'))
+        longest_run_value = longest_run_dict['athlete__run__distance__max']
+        longest_run_user = User.objects.filter(run__distance=longest_run_value).first().id
+        # print(longest_run_user.id)
         # print(longest_run_dict['athlete__run__distance__max'])
         # print(User.objects.filter(is_staff=True).values())
-        return Response({'longest_run_value':longest_run_dict['athlete__run__distance__max']})
+        return Response({'longest_run_value':longest_run_value,
+                         'longest_run_user':longest_run_user})
