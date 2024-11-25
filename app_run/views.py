@@ -228,18 +228,28 @@ class AnalyticsCoachView(APIView):
     def get(self, request, coach_id):
         # longest_run_queryset = Run.objects.filter(athlete__subscription_set__athletes=coach_id).aggregate(Max('distance'))
         coach_queryset = Subscription.objects.filter(coach=coach_id)
+        qs_with_max_distance_field = coach_queryset.annotate(max_distance=Max('athlete__run__distance'))
 
-        longest_run_dict = coach_queryset.aggregate(Max('athlete__run__distance'))
-        longest_run_value = longest_run_dict['athlete__run__distance__max']
-        longest_run_user = User.objects.filter(run__distance=longest_run_value).first().id
+        longest_qs = qs_with_max_distance_field.order_by('-max_distance').first()
+        longest_run_value = longest_qs.max_distance
+        longest_run_user = longest_qs.athlete.id
 
-        total_run_dict = coach_queryset.aggregate(Sum('athlete__run__distance'))
-        total_run_value = total_run_dict['athlete__run__distance__sum']
+        qs_with_sum_distances_field = coach_queryset.annotate(sum_distances=Sum('athlete__run__distance'))
 
-        print(total_run_dict)
+        max_total_run_qs = qs_with_sum_distances_field.order_by('-sum_distances').first()
+        total_run_value = max_total_run_qs.sum_distances
+        total_run_user = max_total_run_qs.athlete.id
+        #
+        # total_run_dict = coach_queryset.aggregate(Sum('athlete__run__distance'))
+        # total_run_value = total_run_dict['athlete__run__distance__sum']
+
+
+        # print(total_run_dict)
         # print(longest_run_dict['athlete__run__distance__max'])
         # print(User.objects.filter(is_staff=True).values())
-        return Response({'longest_run_value':longest_run_value,
-                         'longest_run_user':longest_run_user,
-                         'total_run_value':total_run_value
+        return Response({'longest_run_value': longest_run_value,
+                         'longest_run_user': longest_run_user,
+                         'total_run_value': total_run_value,
+                         'total_run_user': total_run_user
                          })
+        # return Response()
