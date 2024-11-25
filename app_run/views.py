@@ -226,30 +226,29 @@ class CoachRatingView(APIView):
 
 class AnalyticsCoachView(APIView):
     def get(self, request, coach_id):
-        # longest_run_queryset = Run.objects.filter(athlete__subscription_set__athletes=coach_id).aggregate(Max('distance'))
         coach_queryset = Subscription.objects.filter(coach=coach_id)
-        qs_with_max_distance_field = coach_queryset.annotate(max_distance=Max('athlete__run__distance'))
 
+        qs_with_max_distance_field = coach_queryset.annotate(max_distance=Max('athlete__run__distance'))
         longest_qs = qs_with_max_distance_field.order_by('-max_distance').first()
         longest_run_value = longest_qs.max_distance
         longest_run_user = longest_qs.athlete.id
 
         qs_with_sum_distances_field = coach_queryset.annotate(sum_distances=Sum('athlete__run__distance'))
-
         max_total_run_qs = qs_with_sum_distances_field.order_by('-sum_distances').first()
         total_run_value = max_total_run_qs.sum_distances
         total_run_user = max_total_run_qs.athlete.id
-        #
-        # total_run_dict = coach_queryset.aggregate(Sum('athlete__run__distance'))
-        # total_run_value = total_run_dict['athlete__run__distance__sum']
+
+        qs_with_avg_speed_field = coach_queryset.annotate(avg_speed=Avg('athlete__run__speed'))
+        max_avg_speed_qs = qs_with_avg_speed_field.order_by('-avg_speed').first()
+        speed_avg_value = max_avg_speed_qs.avg_speed
+        speed_avg_user = max_avg_speed_qs.athlete.id
 
 
-        # print(total_run_dict)
-        # print(longest_run_dict['athlete__run__distance__max'])
-        # print(User.objects.filter(is_staff=True).values())
         return Response({'longest_run_value': longest_run_value,
                          'longest_run_user': longest_run_user,
                          'total_run_value': total_run_value,
-                         'total_run_user': total_run_user
+                         'total_run_user': total_run_user,
+                         'speed_avg_value': speed_avg_value,
+                         'speed_avg_user': speed_avg_user
                          })
         # return Response()
