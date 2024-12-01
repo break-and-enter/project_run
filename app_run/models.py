@@ -49,6 +49,6 @@ class Challenge(models.Model):
         return f'{self.athlete} - {self.full_name}'
 
 class AthleteInfo(models.Model):
-    level = models.IntegerField()
+    level = models.IntegerField(null=True)
     goals = models.TextField()
     user_id = models.OneToOneField(User, on_delete=models.CASCADE)

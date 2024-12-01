@@ -257,10 +257,11 @@ class AnalyticsCoachView(APIView):
 
 class AthleteInfoView(APIView):
     def get(self, request, user_id):
-        athlete_info, created = AthleteInfo.objects.get_or_create(user_id=user_id)
+        user = User.objects.get(id=user_id)
+        athlete_info, created = AthleteInfo.objects.get_or_create(user_id=user)
         return Response({'level':athlete_info.level,
                          'goals': athlete_info.goals,
-                         'user_id': athlete_info.user__user_id
+                         'user_id': athlete_info.user_id.id
 
         })
 
