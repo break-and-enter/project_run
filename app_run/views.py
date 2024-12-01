@@ -265,10 +265,8 @@ class AthleteInfoView(APIView):
 
         })
 
-    def put(self):
-        pass
 
-    def post(self, request, user_id):
+    def put(self, request, user_id):
         goals = request.data.get('goals')
         level =  request.data.get('level')
         if User.objects.filter(id=user_id).exists():
