@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
-from .models import Run, Position, Subscription, Challenge
+from .models import Run, Position, Subscription, Challenge, AthleteInfo
 from .serializers import RunSerializer, PositionSerializer, UserSerializer, AthleteSerializer, CoachSerializer, \
     ChallengeSerializer
 from geopy.distance import geodesic
@@ -256,8 +256,13 @@ class AnalyticsCoachView(APIView):
                          })
 
 class AthleteInfoView(APIView):
-    def get(self):
-        pass
+    def get(self, request, user_id):
+        athlete_info, created = AthleteInfo.objects.get_or_create(user_id=user_id)
+        return Response({'level':athlete_info.level,
+                         'goals': athlete_info.goals,
+                         'user_id': athlete_info.user__user_id
+
+        })
 
     def put(self):
         pass
