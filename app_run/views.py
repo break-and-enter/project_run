@@ -274,9 +274,14 @@ class AthleteInfoView(APIView):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        if AthleteInfo.objects.filter(user_id = user).exists():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        AthleteInfo.objects.create(user_id=user, goals=goals, level=level)
+        athlete_info, created = AthleteInfo.objects.update_or_create(
+            user_id = user,
+            defaults = {'goals':goals, 'level':level}
+        )
+        # # if AthleteInfo.objects.filter(user_id = user).exists():
+        # #     return Response(status=status.HTTP_400_BAD_REQUEST)
+        #
+        # AthleteInfo.objects.create(user_id=user, goals=goals, level=level)
 
         return Response(status=status.HTTP_201_CREATED)
