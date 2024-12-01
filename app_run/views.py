@@ -269,6 +269,10 @@ class AthleteInfoView(APIView):
     def put(self, request, user_id):
         goals = request.data.get('goals')
         level =  request.data.get('level')
+
+        if not isinstance(level, int) or level not in range(1,6):
+            return Response({'message': 'level должен быть числом от 1 до 5'}, status=status.HTTP_400_BAD_REQUEST)
+
         if User.objects.filter(id=user_id).exists():
             user = User.objects.get(id=user_id)
         else:
