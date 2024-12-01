@@ -272,6 +272,10 @@ class AthleteInfoView(APIView):
         goals = request.data.get('goals')
         level =  request.data.get('level')
         user = User.objects.get(id=user_id)
-        athlete_info, created = AthleteInfo.objects.get_or_create(user_id=user, goals=goals, level=level)
-        if created:
-            return Response(status=status.HTTP_201_CREATED)
+
+        if AthleteInfo.objects.filter(user_id = user).exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        AthleteInfo.objects.create(user_id=user, goals=goals, level=level)
+
+        return Response(status=status.HTTP_201_CREATED)
