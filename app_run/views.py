@@ -276,7 +276,7 @@ class AthleteInfoView(APIView):
         if User.objects.filter(id=user_id).exists():
             user = User.objects.get(id=user_id)
         else:
-            return Response({'message':'Такого User не существует'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message':'Такого User не существует'}, status=status.HTTP_404_NOT_FOUND)
 
 
         athlete_info, created = AthleteInfo.objects.update_or_create(
