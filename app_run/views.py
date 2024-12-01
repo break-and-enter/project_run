@@ -267,3 +267,9 @@ class AthleteInfoView(APIView):
 
     def put(self):
         pass
+
+    def post(self, request, user_id):
+        user = User.objects.get(id=user_id)
+        athlete_info, created = AthleteInfo.objects.get_or_create(user_id=user)
+        if created:
+            return Response(status=status.HTTP_201_CREATED)
