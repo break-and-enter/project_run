@@ -254,3 +254,10 @@ class AnalyticsCoachView(APIView):
                          'speed_avg_value': speed_avg_value,
                          'speed_avg_user': speed_avg_user
                          })
+
+class AthleteInfoView(APIView):
+    def get(self):
+        pass
+
+    def put(self):
+        pass

@@ -47,3 +47,8 @@ class Challenge(models.Model):
 
     def __str__(self):
         return f'{self.athlete} - {self.full_name}'
+
+class AthleteInfo(models.Model):
+    level = models.IntegerField()
+    goals = models.TextField()
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
