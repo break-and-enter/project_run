@@ -255,16 +255,16 @@ class AnalyticsCoachView(APIView):
                          'speed_avg_user': speed_avg_user
                          })
 
+
 class AthleteInfoView(APIView):
     def get(self, request, user_id):
         user = User.objects.get(id=user_id)
-        athlete_info, created = AthleteInfo.objects.get_or_create(user_id=user)
-        return Response({'level':athlete_info.level,
+        athlete_info, created = AthleteInfo.objects.get_or_create(user=user)
+        return Response({'level': athlete_info.level,
                          'goals': athlete_info.goals,
-                         'user_id': athlete_info.user_id.id
+                         'user_id': athlete_info.user.id
 
         })
-
 
     def put(self, request, user_id):
         goals = request.data.get('goals')
@@ -278,14 +278,9 @@ class AthleteInfoView(APIView):
         else:
             return Response({'message':'Такого User не существует'}, status=status.HTTP_404_NOT_FOUND)
 
-
         athlete_info, created = AthleteInfo.objects.update_or_create(
-            user_id = user,
+            user = user,
             defaults = {'goals':goals, 'level':level}
         )
-        # # if AthleteInfo.objects.filter(user_id = user).exists():
-        # #     return Response(status=status.HTTP_400_BAD_REQUEST)
-        #
-        # AthleteInfo.objects.create(user_id=user, goals=goals, level=level)
 
         return Response({'message': 'Создано/изменено'}, status=status.HTTP_201_CREATED)

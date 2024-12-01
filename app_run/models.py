@@ -51,4 +51,4 @@ class Challenge(models.Model):
 class AthleteInfo(models.Model):
     level = models.IntegerField(null=True)
     goals = models.TextField()
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
