@@ -271,7 +271,10 @@ class AthleteInfoView(APIView):
     def post(self, request, user_id):
         goals = request.data.get('goals')
         level =  request.data.get('level')
-        user = User.objects.get(id=user_id)
+        if User.objects.filter(id=user_id).exists():
+            user = User.objects.get(id=user_id)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if AthleteInfo.objects.filter(user_id = user).exists():
             return Response(status=status.HTTP_400_BAD_REQUEST)
