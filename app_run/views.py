@@ -321,6 +321,13 @@ def upload_view(request):
         return Response(wrong_rows_list)
     return Response([])
 
+
 class CollectibleItemViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CollectibleItem.objects.all()
     serializer_class = CollectibleItemSerializer
+
+    def get_queryset(self):
+        qs = self.queryset
+        for i in qs:
+            print(i)
+        return qs
