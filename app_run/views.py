@@ -317,7 +317,7 @@ def upload_view(request):
 
         print(wrong_rows_list)
         return JsonResponse(wrong_rows_list, safe=False)
-    return Response([])
+    return JsonResponse([],safe=False)
 
 class CollectibleItemViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CollectibleItem.objects.all()
