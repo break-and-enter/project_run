@@ -12,6 +12,7 @@ from geopy.distance import geodesic
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
 from django.db import connection
+import openpyxl as op
 
 
 class RunViewSet(viewsets.ModelViewSet):
@@ -289,3 +290,6 @@ class AthleteInfoView(APIView):
 def upload_view(request):
     if request.method == 'POST' and request.FILES.get('xlsx_file'):
         uploaded_xlsx_file = request.FILES['xlsx_file']
+        wb = op.load_workbook(uploaded_xlsx_file, data_only=True)
+        ws = wb.active
+        print(ws.cell(row=1, column=1).value)
