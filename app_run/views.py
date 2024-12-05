@@ -317,5 +317,5 @@ def upload_view(request):
             # print(picture)
             # print('-----------------')
     # print(sheet.cell(row=row, column=1).value)
-        return Response({'result': wrong_rows_list})
-    return Response({'message': 'all ok'})
+        return Response(wrong_rows_list)
+    return Response([])
