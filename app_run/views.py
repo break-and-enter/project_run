@@ -319,3 +319,7 @@ def upload_view(request):
     # print(sheet.cell(row=row, column=1).value)
         return Response(wrong_rows_list)
     return Response([])
+
+class CollectibleItemViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = CollectibleItem.objects.all()
+    serializer_class = CollectibleItemSerializer

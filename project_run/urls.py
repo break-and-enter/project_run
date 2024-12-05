@@ -21,13 +21,14 @@ from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from app_run.views import RunViewSet, StatusStartView, status_stop_view, company_details, PositionViewSet, \
     UserViewSet, SubscribeView, ChallengeViewSet, challenge_summary_view, CoachRatingView, AnalyticsCoachView, \
-    AthleteInfoView, upload_view
+    AthleteInfoView, upload_view, CollectibleItemViewSet
 
 router = DefaultRouter()
 router.register(r'api/runs', RunViewSet)
 router.register(r'api/positions', PositionViewSet)
 router.register(r'api/users', UserViewSet)
 router.register(r'api/challenges', ChallengeViewSet)
+router.register(r'api/collectible_item', CollectibleItemViewSet)
 
 
 urlpatterns = [
