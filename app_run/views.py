@@ -5,9 +5,9 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
-from .models import Run, Position, Subscription, Challenge, AthleteInfo
+from .models import Run, Position, Subscription, Challenge, AthleteInfo, CollectibleItem
 from .serializers import RunSerializer, PositionSerializer, UserSerializer, AthleteSerializer, CoachSerializer, \
-    ChallengeSerializer
+    ChallengeSerializer, CollectibleItemSerializer
 from geopy.distance import geodesic
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
@@ -290,6 +290,32 @@ class AthleteInfoView(APIView):
 def upload_view(request):
     if request.method == 'POST' and request.FILES.get('xlsx_file'):
         uploaded_xlsx_file = request.FILES['xlsx_file']
+        # wb =  op.load_workbook('upload_example.xlsx')
         wb = op.load_workbook(uploaded_xlsx_file, data_only=True)
-        ws = wb.active
-        print(ws.cell(row=1, column=1).value)
+        sheet = wb.active
+        wrong_rows_list=[]
+        for row in sheet.iter_rows(min_row=2, max_row=sheet.max_row, values_only=True):
+            name, value, latitude, longitude, picture = row
+            data = {
+                'name': name,
+                'latitude': latitude,
+                'longitude': longitude,
+                'picture': picture,
+                'value': value,
+            }
+            serializer = CollectibleItemSerializer(data=data)
+            if serializer.is_valid():
+                CollectibleItem.objects.create(name=name,
+                                               value=value,
+                                               latitude=latitude,
+                                               longitude=longitude,
+                                               picture=picture)
+            else:
+                wrong_rows_list.append([name,value,latitude,longitude,picture])
+            # print(serializer.is_valid())
+            # print(serializer.errors)
+            # print(picture)
+            # print('-----------------')
+    # print(sheet.cell(row=row, column=1).value)
+        return Response(wrong_rows_list)
+    return Response()

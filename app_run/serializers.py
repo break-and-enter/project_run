@@ -1,6 +1,6 @@
 from django.db.models import Avg
 from rest_framework import serializers
-from .models import Run, Position, Subscription, Challenge
+from .models import Run, Position, Subscription, Challenge, CollectibleItem
 from django.contrib.auth.models import User
 from django.db import connection
 
@@ -102,7 +102,24 @@ class CoachSerializer(UserSerializer):
         athletes_list = Subscription.objects.filter(coach=obj.id).values_list('athlete__id', flat=True)
         return athletes_list
 
+
 class ChallengeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Challenge
         fields = '__all__'
+
+
+class CollectibleItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CollectibleItem
+        fields = '__all__'
+
+    def validate_latitude(self, value):
+        if value > 90 or value < -90:
+            raise serializers.ValidationError('latitude должен быть в диапазоне от -90.0 до +90.0 градусов')
+        return value
+
+    def validate_longitude(self, value):
+        if value > 180 or value < -180:
+            raise serializers.ValidationError('longitude должен быть в диапазоне от -180.0 до +180.0 градусов')
+        return value
