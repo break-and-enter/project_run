@@ -289,11 +289,11 @@ class AthleteInfoView(APIView):
 
 @api_view(['POST'])
 def upload_view(request):
-    # if request.method == 'POST' and request.FILES.get('xlsx_file'):
-    if True:
-        # uploaded_xlsx_file = request.FILES['xlsx_file']
-        wb =  op.load_workbook('upload_example.xlsx')
-        # wb = op.load_workbook(uploaded_xlsx_file, data_only=True)
+    if request.method == 'POST' and request.FILES.get('xlsx_file'):
+    # if True:
+        uploaded_xlsx_file = request.FILES['xlsx_file']
+        # wb =  op.load_workbook('upload_example.xlsx')
+        wb = op.load_workbook(uploaded_xlsx_file, data_only=True)
         sheet = wb.active
         wrong_rows_list=[]
         for row in sheet.iter_rows(min_row=2, max_row=sheet.max_row, values_only=True):
