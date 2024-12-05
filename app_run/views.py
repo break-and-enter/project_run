@@ -289,9 +289,9 @@ class AthleteInfoView(APIView):
 
 @api_view(['POST'])
 def upload_view(request):
-    if request.method == 'POST' and request.FILES.get('xlsx_file'):
+    if request.method == 'POST' and request.FILES.get('file'):
     # if True:
-        uploaded_xlsx_file = request.FILES['xlsx_file']
+        uploaded_xlsx_file = request.FILES['file']
         # wb =  op.load_workbook('upload_example.xlsx')
         wb = op.load_workbook(uploaded_xlsx_file, data_only=True)
         sheet = wb.active
