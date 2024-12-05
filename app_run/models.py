@@ -52,3 +52,14 @@ class AthleteInfo(models.Model):
     level = models.IntegerField(null=True)
     goals = models.TextField()
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+class CollectibleItem(models.Model):
+    name = models.CharField(max_length=200, default='')
+    latitude = models.DecimalField(decimal_places=4, max_digits=7)
+    longitude = models.DecimalField(decimal_places=4, max_digits=8)
+    picture = models.URLField()
+    value = models.IntegerField(null=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.value}"

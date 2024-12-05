@@ -20,7 +20,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from app_run.views import RunViewSet, StatusStartView, status_stop_view, company_details, PositionViewSet, \
-    UserViewSet, SubscribeView, ChallengeViewSet, challenge_summary_view, CoachRatingView, AnalyticsCoachView, AthleteInfoView
+    UserViewSet, SubscribeView, ChallengeViewSet, challenge_summary_view, CoachRatingView, AnalyticsCoachView, \
+    AthleteInfoView, upload_view
 
 router = DefaultRouter()
 router.register(r'api/runs', RunViewSet)
@@ -39,5 +40,6 @@ urlpatterns = [
     path('api/rate_coach/<int:coach_id>/', CoachRatingView.as_view()),
     path('api/analytics_for_coach/<int:coach_id>/', AnalyticsCoachView.as_view()),
     path('api/athlete_info/<int:user_id>/', AthleteInfoView.as_view()),
+    path('api/upload_file/',upload_view),
     path('', include(router.urls)),
 ]

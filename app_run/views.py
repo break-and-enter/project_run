@@ -284,3 +284,8 @@ class AthleteInfoView(APIView):
         )
 
         return Response({'message': 'Создано/изменено'}, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def upload_view(request):
+    if request.method == 'POST' and request.FILES.get('xlsx_file'):
+        uploaded_xlsx_file = request.FILES['xlsx_file']
