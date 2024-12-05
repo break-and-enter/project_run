@@ -1,4 +1,5 @@
 from django.db.models import Avg, Count, Q, Sum, Max
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
@@ -288,10 +289,11 @@ class AthleteInfoView(APIView):
 
 @api_view(['POST'])
 def upload_view(request):
-    if request.method == 'POST' and request.FILES.get('xlsx_file'):
-        uploaded_xlsx_file = request.FILES['xlsx_file']
-        # wb =  op.load_workbook('upload_example.xlsx')
-        wb = op.load_workbook(uploaded_xlsx_file, data_only=True)
+    # if request.method == 'POST' and request.FILES.get('xlsx_file'):
+    if True:
+        # uploaded_xlsx_file = request.FILES['xlsx_file']
+        wb =  op.load_workbook('upload_example.xlsx')
+        # wb = op.load_workbook(uploaded_xlsx_file, data_only=True)
         sheet = wb.active
         wrong_rows_list=[]
         for row in sheet.iter_rows(min_row=2, max_row=sheet.max_row, values_only=True):
@@ -312,12 +314,9 @@ def upload_view(request):
                                                picture=picture)
             else:
                 wrong_rows_list.append([name,value,latitude,longitude,picture])
-            # print(serializer.is_valid())
-            # print(serializer.errors)
-            # print(picture)
-            # print('-----------------')
-    # print(sheet.cell(row=row, column=1).value)
-        return Response(wrong_rows_list)
+
+        print(wrong_rows_list)
+        return JsonResponse(wrong_rows_list, safe=False)
     return Response([])
 
 class CollectibleItemViewSet(viewsets.ReadOnlyModelViewSet):
