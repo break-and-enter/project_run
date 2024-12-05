@@ -300,6 +300,7 @@ def upload_view(request):
             name, uid, value, latitude, longitude, picture = row
             data = {
                 'name': name,
+                'uid': uid,
                 'latitude': latitude,
                 'longitude': longitude,
                 'picture': picture,
@@ -308,12 +309,13 @@ def upload_view(request):
             serializer = CollectibleItemSerializer(data=data)
             if serializer.is_valid():
                 CollectibleItem.objects.create(name=name,
+                                               uid=uid,
                                                value=value,
                                                latitude=latitude,
                                                longitude=longitude,
                                                picture=picture)
             else:
-                wrong_rows_list.append([name,value,latitude,longitude,picture])
+                wrong_rows_list.append([name,uid,value,latitude,longitude,picture])
 
         print(wrong_rows_list)
         return JsonResponse(wrong_rows_list, safe=False)

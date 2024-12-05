@@ -56,6 +56,7 @@ class AthleteInfo(models.Model):
 
 class CollectibleItem(models.Model):
     name = models.CharField(max_length=200, default='')
+    uid = models.CharField(max_length=200, default='')
     latitude = models.DecimalField(decimal_places=4, max_digits=7)
     longitude = models.DecimalField(decimal_places=4, max_digits=8)
     picture = models.URLField()
