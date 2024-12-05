@@ -297,7 +297,7 @@ def upload_view(request):
         sheet = wb.active
         wrong_rows_list=[]
         for row in sheet.iter_rows(min_row=2, max_row=sheet.max_row, values_only=True):
-            name, value, latitude, longitude, picture = row
+            name, uid, value, latitude, longitude, picture = row
             data = {
                 'name': name,
                 'latitude': latitude,
