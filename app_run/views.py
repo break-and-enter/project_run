@@ -318,7 +318,7 @@ def upload_view(request):
                 wrong_rows_list.append([name,uid,value,latitude,longitude,picture])
 
         print(wrong_rows_list)
-        return JsonResponse(wrong_rows_list, safe=False)
+        return Response(wrong_rows_list)
     return JsonResponse([],safe=False)
 
 class CollectibleItemViewSet(viewsets.ReadOnlyModelViewSet):
