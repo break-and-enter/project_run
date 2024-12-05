@@ -318,4 +318,4 @@ def upload_view(request):
             # print('-----------------')
     # print(sheet.cell(row=row, column=1).value)
         return Response(wrong_rows_list)
-    return Response([])
+    return Response()
