@@ -319,7 +319,7 @@ def upload_view(request):
 
         print(wrong_rows_list)
         return Response(wrong_rows_list)
-    return JsonResponse([],safe=False)
+    return Response([])
 
 class CollectibleItemViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CollectibleItem.objects.all()
