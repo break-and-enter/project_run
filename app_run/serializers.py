@@ -112,7 +112,8 @@ class ChallengeSerializer(serializers.ModelSerializer):
 class CollectibleItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectibleItem
-        fields = ['name', 'uid', 'value', 'latitude', 'longitude', 'picture']
+        # fields = ['name', 'uid', 'value', 'latitude', 'longitude', 'picture']
+        fields = '__all__'
 
     def validate_latitude(self, value):
         if value > 90 or value < -90:

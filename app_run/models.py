@@ -64,3 +64,12 @@ class CollectibleItem(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.value}"
+
+
+class ItemAthletRelation(models.Model):
+    item = models.ForeignKey(CollectibleItem, on_delete=models.CASCADE, related_name='athletes')
+    athlete = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items')
+
+    def __str__(self):
+        return f"Атлет {self.athlete} подобрал {self.item}"
+
