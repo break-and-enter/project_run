@@ -1,6 +1,6 @@
 from django.db.models import Avg
 from rest_framework import serializers
-from .models import Run, Position, Subscription, Challenge, CollectibleItem, ItemAthletRelation
+from .models import Run, Position, Subscription, Challenge, CollectibleItem
 from django.contrib.auth.models import User
 from django.db import connection
 from geopy.distance import geodesic
@@ -75,7 +75,7 @@ class UserSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     runs_finished = serializers.IntegerField()
     rating = serializers.FloatField()
-    items = CollectibleItemSerializer(source='items__item', many=True, read_only=True)
+    items = CollectibleItemSerializer(source='collectibleitems', many=True, read_only=True)
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished', 'rating', 'items']

@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
-from .models import Run, Position, Subscription, Challenge, AthleteInfo, CollectibleItem, ItemAthletRelation
+from .models import Run, Position, Subscription, Challenge, AthleteInfo, CollectibleItem
 from .serializers import RunSerializer, PositionSerializer, UserSerializer, AthleteSerializer, CoachSerializer, \
     ChallengeSerializer, CollectibleItemSerializer
 from geopy.distance import geodesic

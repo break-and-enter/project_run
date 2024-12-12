@@ -61,15 +61,9 @@ class CollectibleItem(models.Model):
     longitude = models.DecimalField(decimal_places=4, max_digits=8)
     picture = models.URLField()
     value = models.IntegerField(null=True)
+    user = models.ManyToManyField(User, blank=True, related_name='collectibleitems')
 
     def __str__(self):
         return f"{self.name} - {self.value}"
 
-
-class ItemAthletRelation(models.Model):
-    item = models.ForeignKey(CollectibleItem, on_delete=models.CASCADE, related_name='athletes')
-    athlete = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items')
-
-    def __str__(self):
-        return f"Атлет {self.athlete} подобрал {self.item}"
 
