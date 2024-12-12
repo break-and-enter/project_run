@@ -41,10 +41,6 @@ class PositionSerializer(serializers.ModelSerializer):
             distance = geodesic((current_latitude,current_longitude), (item.latitude, item.longitude)).meters
             if distance <= 100:
                 ItemAthletRelation.objects.create(athlete=run.athlete, item=item)
-        # collectibleItems_nearby=CollectibleItem.objects.filter()
-        #
-        # if расстояние между этой позицией и каким то из коллектибле итемз < 100 метров, то:
-        #     ItemAthletRelation.objects.create(athlete=, item=)
 
         return data
 
@@ -74,12 +70,20 @@ class CollectibleItemSerializer(serializers.ModelSerializer):
         return value
 
 
+class ItemAthletRelationSerializer(serializers.ModelSerializer):
+    item = CollectibleItemSerializer()
+
+    class Meta:
+        model = ItemAthletRelation
+        fields = ['item']
+
+
 # Вариант № 1, где поле rating добавляется и вычисляется в get_queryset
 class UserSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     runs_finished = serializers.IntegerField()
     rating = serializers.FloatField()
-    items = CollectibleItemSerializer(many=True, read_only=True)
+    items = ItemAthletRelationSerializer(many=True, read_only=True)
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished', 'rating', 'items']
