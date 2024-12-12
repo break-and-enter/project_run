@@ -44,7 +44,6 @@ class PositionSerializer(serializers.ModelSerializer):
 class CollectibleItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectibleItem
-        # fields = ['name', 'uid', 'value', 'latitude', 'longitude', 'picture']
         fields = '__all__'
 
     def validate_latitude(self, value):
@@ -66,7 +65,7 @@ class UserSerializer(serializers.ModelSerializer):
     items = CollectibleItemSerializer
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished', 'rating']
+        fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished', 'rating', 'items']
 
     def get_type(self, obj):
         if obj.is_staff:
