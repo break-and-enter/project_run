@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
-from .models import Run, Position, Subscription, Challenge, AthleteInfo, CollectibleItem
+from .models import Run, Position, Subscription, Challenge, AthleteInfo, CollectibleItem, ItemAthletRelation
 from .serializers import RunSerializer, PositionSerializer, UserSerializer, AthleteSerializer, CoachSerializer, \
     ChallengeSerializer, CollectibleItemSerializer
 from geopy.distance import geodesic
@@ -111,6 +111,8 @@ class PositionViewSet(viewsets.ModelViewSet):
             last_position.speed = round(speed, 2)
             last_position.distance = round(previous_distance + last_distance/1000, 2)
             last_position.save()
+        # if расстояние между этой позицией и каким то из коллектибле итемз < 100 метров, то:
+            # ItemAthletRelation.objects.create(athlete=, item=)
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):

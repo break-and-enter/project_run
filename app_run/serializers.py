@@ -1,8 +1,9 @@
 from django.db.models import Avg
 from rest_framework import serializers
-from .models import Run, Position, Subscription, Challenge, CollectibleItem
+from .models import Run, Position, Subscription, Challenge, CollectibleItem, ItemAthletRelation
 from django.contrib.auth.models import User
 from django.db import connection
+from geopy.distance import geodesic
 
 
 class SmallUserSerializer(serializers.ModelSerializer):
@@ -29,6 +30,22 @@ class PositionSerializer(serializers.ModelSerializer):
         run = data.get('run')
         if run.status != 'in_progress':
             raise serializers.ValidationError('Забег должен быть начат и еще не закончен')
+
+        current_latitude = data.get('latitude')
+        current_longitude = data.get('longitude')
+
+        collectible_items = CollectibleItem.objects.all()
+
+        nearby_items = []
+        for item in collectible_items:
+            distance = geodesic((current_latitude,current_longitude), (item.latitude, item.longitude)).meters
+            if distance <= 100:
+                ItemAthletRelation.objects.create(athlete=run.athlete, item=item)
+        # collectibleItems_nearby=CollectibleItem.objects.filter()
+        #
+        # if расстояние между этой позицией и каким то из коллектибле итемз < 100 метров, то:
+        #     ItemAthletRelation.objects.create(athlete=, item=)
+
         return data
 
     def validate_latitude(self, value):
