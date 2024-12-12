@@ -36,7 +36,7 @@ class PositionSerializer(serializers.ModelSerializer):
 
         collectible_items = CollectibleItem.objects.all()
 
-        nearby_items = []
+
         for item in collectible_items:
             distance = geodesic((current_latitude,current_longitude), (item.latitude, item.longitude)).meters
             if distance <= 100:
@@ -79,7 +79,7 @@ class UserSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     runs_finished = serializers.IntegerField()
     rating = serializers.FloatField()
-    items = CollectibleItemSerializer
+    items = CollectibleItemSerializer(many=True)
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished', 'rating', 'items']
