@@ -70,20 +70,12 @@ class CollectibleItemSerializer(serializers.ModelSerializer):
         return value
 
 
-class ItemAthletRelationSerializer(serializers.ModelSerializer):
-    item = CollectibleItemSerializer()
-
-    class Meta:
-        model = ItemAthletRelation
-        fields = ['item']
-
-
 # Вариант № 1, где поле rating добавляется и вычисляется в get_queryset
 class UserSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     runs_finished = serializers.IntegerField()
     rating = serializers.FloatField()
-    items = ItemAthletRelationSerializer(many=True, read_only=True)
+    items = CollectibleItemSerializer(source='items__item', many=True, read_only=True)
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished', 'rating', 'items']
