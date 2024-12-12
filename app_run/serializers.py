@@ -75,7 +75,7 @@ class UserSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     runs_finished = serializers.IntegerField()
     rating = serializers.FloatField()
-    items = CollectibleItemSerializer(source='items__athletes', many=True, read_only=True)
+    items = CollectibleItemSerializer(source='items', many=True, read_only=True)
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'type', 'runs_finished', 'rating', 'items']
